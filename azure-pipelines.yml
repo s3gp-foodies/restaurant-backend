@@ -37,10 +37,10 @@ stages:
       displayName: Build
       inputs:
         command: build
-        projects: '**/[Rr]estaurant-app/backend/*.csproj'
+        projects: 'backend/*.csproj'
         arguments: '--configuration $(buildConfiguration)'
     - task: DotNetCoreCLI@2
       inputs:
         command: test
-        projects: '**/[Rr]estaurant-app/backend-test/*.csproj'
+        projects: 'backend-test/*.csproj'
         arguments: '--configuration $(buildConfiguration)'
