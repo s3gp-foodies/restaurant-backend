@@ -1,0 +1,46 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+   include:
+     - main
+     - dev
+
+pr:
+  branches:
+   include:
+     - main
+     - dev
+
+variables:
+  dotNetVersion: '6.0.x'
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+
+stages:
+- stage: "Dotnet"
+  jobs:
+  - job: "DotnetBuild"
+    pool:
+      buildConfiguration: 'Release'
+      vmImage: ubuntu-latest
+
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '$(dotNetVersion)'
+        includePreviewVersions: true
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        command: build
+        projects: '**/[Rr]estaurant-app/backend/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: test
+        projects: '**/[Rr]estaurant-app/backend-test/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
