@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\Controllers",
+    "\\backend\\Data",
+    "\\backend\\Data\\Repositories",
+    "\\backend\\Entities",
+    "\\backend\\Interfaces"
+  ],
+  "SelectedNode": "\\backend\\Controllers\\MenuItemController.cs",
+  "PreviewInSolutionExplorer": false
+}
