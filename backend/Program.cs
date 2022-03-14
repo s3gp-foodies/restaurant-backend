@@ -1,3 +1,6 @@
+using foodies_app.Data;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,7 +18,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
 
+app.UseWebSockets(webSocketOptions);
+app.UseWebSockets();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
