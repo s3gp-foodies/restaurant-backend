@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data.Repositories
 {
-    public class RepositoryMenuItems : IReposditoryMenuItems
+    public class RepositoryMenuItems : IRepositoryMenuItems
 
     {
         private readonly DataContext _context;

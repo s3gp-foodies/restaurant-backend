@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Repositories" />
-    <Folder Include="DTOs\" />
+    <Folder Include="Migrations\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

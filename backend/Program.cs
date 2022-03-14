@@ -1,15 +1,24 @@
 using foodies_app.Data;
-
+using foodies_app.Data.Repositories;
+using foodies_app.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+//builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseSqlite(builder.Configuration.GetConnectionString("DatabaseConnection"));
+});
+//dit werkt als dbcontext is gefixed run maar
+builder.Services.AddScoped<IRepositoryMenuItems, RepositoryMenuItems>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
