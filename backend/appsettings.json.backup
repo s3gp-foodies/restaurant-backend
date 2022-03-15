@@ -1,4 +1,7 @@
 {
+  "ConnectionStrings": {
+    "DatabaseConnection": "REPLACE-WITH-SOURCE"
+  },
   "Logging": {
     "LogLevel": {
       "Default": "Information",
