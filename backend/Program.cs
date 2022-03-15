@@ -1,26 +1,24 @@
-using foodies_app.Data;
-using foodies_app.Data.Repositories;
-using foodies_app.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using foodies_app.Extensions;
+using foodies_app.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-//builder.Services.AddMemoryCache();
+// Add services UNDER this line
+//Extension to put all custom services in. Only add services to program.cs if they are not made by us.
+builder.Services.AddApplicationServices(builder.Configuration);
+
 builder.Services.AddControllers();
 builder.Services.AddCors();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    options.UseSqlite(builder.Configuration.GetConnectionString("DatabaseConnection"));
-});
-//dit werkt als dbcontext is gefixed run maar
-builder.Services.AddScoped<IRepositoryMenuItems, RepositoryMenuItems>();
+//Add services ABOVE this line
 var app = builder.Build();
+
+//Configure app UNDER this line
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -28,21 +26,26 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//Websocket config
 var webSocketOptions = new WebSocketOptions
 {
     KeepAliveInterval = TimeSpan.FromMinutes(2)
 };
-
 app.UseWebSockets(webSocketOptions);
 app.UseWebSockets();
-app.UseHttpsRedirection();
 
-app.UseCors(policy =>policy.AllowAnyHeader()
+//Request config
+app.UseHttpsRedirection();
+app.UseCors(policy => policy.AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials()
     .WithOrigins("https://localhost:4200"));
+app.UseAuthentication();
 app.UseAuthorization();
 
+//Add different endpoints
 app.MapControllers();
+// app.MapHub<PresenceHub>("hubs/presence"); - this is for adding websocket hubs
 
 app.Run();
