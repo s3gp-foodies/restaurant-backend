@@ -595,3 +595,6 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/vuejs,rider,webstorm,visualstudio,visualstudiocode,dotnetcore
 
 appsettings.json
+**/.idea/
+.idea/
+
