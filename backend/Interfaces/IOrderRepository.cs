@@ -2,10 +2,10 @@
 
 namespace foodies_app.Interfaces
 {
-    public interface IRepositoryOrder
+    public interface IOrderRepository
     {
         Task<IEnumerable<Order>> GetOrders();
-        Task<Order> GetOrder(int id);
+        Task<Order> GetOrder(Guid id);
         void Add(Order item);
         void Delete(Order item);
         void Edit(Order item);

@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data.Repositories
 {
-    public class RepositoryMenuItems : IRepositoryMenuItems
+    public class MenuItemRepository : IMenuItemRepository
 
     {
         private readonly DataContext _context;
 
-        public RepositoryMenuItems(DataContext db)
+        public MenuItemRepository(DataContext db)
         {
             _context= db;
         }
@@ -29,12 +29,12 @@ namespace foodies_app.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<MenuItem> GetMenuItem( int id)
+        public async Task<MenuItem?> GetMenuItem(Guid id)
         {
             return await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<MenuItem>> GetMenuItems()
+        public async Task<IEnumerable<MenuItem?>> GetMenuItems()
         {
             return await _context.MenuItems.ToListAsync();
         }

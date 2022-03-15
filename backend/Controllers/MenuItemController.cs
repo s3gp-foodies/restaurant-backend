@@ -10,12 +10,13 @@ namespace foodies_app.Controllers
     [ApiController]
     public class MenuItemController : ControllerBase
     {
-        private readonly IRepositoryMenuItems _repositoryMenuItems;
+        private readonly IMenuItemRepository _menuItemRepository;
 
-        public MenuItemController(IRepositoryMenuItems repositoryMenuItems)
+        public MenuItemController(IMenuItemRepository menuItemRepository)
         {
-            _repositoryMenuItems = repositoryMenuItems;
+            _menuItemRepository = menuItemRepository;
         }
+
         // GET: api/<MenuItemController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MenuItem>>> GetAll()
@@ -30,53 +31,39 @@ namespace foodies_app.Controllers
 
         // GET api/<MenuItemController>/5
         [HttpGet("{id}")]
-       
-        public async Task<MenuItem> Get(int id)
+        public async Task<MenuItem> Get(Guid id)
         {
-            if (id != 0)
-            {
-                return await _repositoryMenuItems.GetMenuItem(id);
-            }
-           else
-            {
-                //make badrequest
-                MenuItem item = new MenuItem();
-                return item;
-            }
+            return await _menuItemRepository.GetMenuItem(id);
         }
 
         // POST api/<MenuItemController>
         [HttpPost]
         public void Post([FromBody] MenuItem value)
         {
-            if (value.Category != null && value.Description != null && value.Title != null)
+            if (value.Description != null)
             {
-                _repositoryMenuItems.Add(value);
+                _menuItemRepository.Add(value);
             }
-            else BadRequest();
+            else BadRequest("Description of item is empty");
         }
 
         // PUT api/<MenuItemController>/5
         [HttpPut("{id}")]
-        public async void Put(int id, [FromBody] MenuItem menuitem)
+        public async void Put(Guid id, [FromBody] MenuItem menuitem)
         {
-            MenuItem item = await _repositoryMenuItems.GetMenuItem(id);
-            if(item.Description != null && item.Title !=null)
-                {
-                _repositoryMenuItems.Add(menuitem);
-                }
+            var item = await _menuItemRepository.GetMenuItem(id);
+            if (item.Description != null)
+            {
+                _menuItemRepository.Add(menuitem);
+            }
         }
 
         // DELETE api/<MenuItemController>/5
         [HttpDelete("{id}")]
-        public async void Delete(int id)
+        public async void Delete(Guid id)
         {
-            MenuItem item = await _repositoryMenuItems.GetMenuItem(id);
-            if(item.Id != 0 && item.Title != null)
-            {
-                _repositoryMenuItems.Delete(item);
-            }
-
+            var item = await _menuItemRepository.GetMenuItem(id);
+            _menuItemRepository.Delete(item);
         }
     }
 }

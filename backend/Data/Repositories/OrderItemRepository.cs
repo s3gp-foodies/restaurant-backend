@@ -4,40 +4,40 @@ using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data.Repositories
 {
-    public class RepositoryOrderItem : IRepositoryMenuItems
+    public class OrderItemRepository : IOrderItemRepository
     {
         private readonly DataContext _context;
 
-        public RepositoryOrderItem(DataContext db)
+        public OrderItemRepository(DataContext db)
         {
             _context = db;
         }
        
 
-        public void Add(MenuItem item)
+        public void Add(OrderItem item)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(MenuItem item)
+        public void Delete(OrderItem item)
         {
             throw new NotImplementedException();
         }
 
 
-        public void Edit(MenuItem item)
+        public void Edit(OrderItem item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<MenuItem> GetMenuItem(int id)
+        public async Task<OrderItem?> GetOrderItem(Guid id)
         {
-            return await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.OrderItems.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<MenuItem>> GetMenuItems()
+        public async Task<IEnumerable<OrderItem?>> GetOrderItems()
         {
-            return await _context.MenuItems.ToListAsync();
+            return await _context.OrderItems.ToListAsync();
         }
     }
 }

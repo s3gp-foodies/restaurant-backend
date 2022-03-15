@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data.Repositories
 {
-    public class RepositoryTable
+    public class TableRepository
     {
     }
 }

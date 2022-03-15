@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data.Repositories
 {
-    public class RepositoryUser
+    public class UserRepository
     {
         private readonly DataContext _context;
 
-        public RepositoryUser(DataContext db)
+        public UserRepository(DataContext db)
         {
             _context = db;
         }
@@ -27,12 +27,12 @@ namespace foodies_app.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<User> GetUser(int id)
+        public async Task<AppUser?> GetUser(Guid id)
         {
-            return await _context.Users.FirstOrDefaultAsync(x => x.ID == id);
+            return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<List<AppUser>> GetUsers()
         {
             return await _context.Users.ToListAsync();
         }

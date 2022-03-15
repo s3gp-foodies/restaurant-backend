@@ -1,34 +1,41 @@
-﻿namespace foodies_app.Data
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+namespace foodies_app.Data;
+
+using Entities;
+using Microsoft.EntityFrameworkCore;
+
+public class DataContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUserClaim<Guid>, AppUserRole,
+    IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
 {
-    using foodies_app.Entities;
-    using Microsoft.EntityFrameworkCore;
-    public class DataContext : DbContext, IDisposable
+    public DataContext(DbContextOptions options) : base(options)
     {
+    }
+    
+    public DbSet<Allergy> Allergies { get; set; }
+    
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<MenuItem> MenuItems { get; set; }
 
-        public DataContext(DbContextOptions options) : base(options) { }
-       
-        public DbSet<User> Users { get; set; }
-        public DbSet<Table> Tables { get; set; }
-        public DbSet<Category> Categorys { get; set; }
-        public DbSet<MenuItem> MenuItems { get; set; }
-        public DbSet<AllergyCategory> Allergys { get; set; }
-        public string DbPath { get; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
 
-       // protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //   => options.UseSqlite($"Data Source={DbPath}");
+    public DbSet<Table> Tables { get; set; }
 
-    public MenuItem GetMenuItem(int id)
-        {
-            try
-            {
-                return MenuItems.Where(x => x.Id == id).FirstOrDefault();
-            }
-            catch (Exception)
-            {
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
 
-                throw;
-            }
-           
-        }
+        builder.Entity<AppUser>()
+            .HasMany(u => u.UserRoles)
+            .WithOne(r => r.User)
+            .HasForeignKey(u => u.UserId)
+            .IsRequired();
+        builder.Entity<AppRole>()
+            .HasMany(r => r.UserRoles)
+            .WithOne(u => u.Role)
+            .HasForeignKey(r => r.RoleId)
+            .IsRequired();
     }
 }
