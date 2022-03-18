@@ -28,16 +28,15 @@ namespace foodies_app.Controllers
         public IEnumerable<string> ConfirmOrder(list Order)
         {
             Order = repositoryOrder.GetOrder;
-            foreach( in Order)
+            foreach(orderItem in Order)
             {
+                int id = orderItem.id;
+                int productid = orderItem.productid;
+                int quantity = orderItem.quantity;
+                string image = orderItem.image;
 
             }
-            int id = 0;
-            string title = txtTitle;
-            string artist = txtArtist;
-            string link = txtLink;
-            DateTime created = DateTime.Now;
-            Albumlogic.AddAlbum(id, title, artist, link, created);
+
             return RedirectToAction("index");
         }
 

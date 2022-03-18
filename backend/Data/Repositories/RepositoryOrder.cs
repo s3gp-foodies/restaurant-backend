@@ -14,12 +14,12 @@ namespace foodies_app.Data.Repositories
 
         public async Task<IEnumerable<Order>> GetOrder()
         {
-            List OrderItems = new List<OrderItem>();
+            List Order = new List<OrderItem>();
             using (MySqlConnection con = Helper.MySqlConnect.Connection)
             {
                 if (con.State == ConnectionState.Closed)
                     con.Open();
-                string query = "SELECT id, quantity, total FROM OrderItem";
+                string query = "SELECT id, productid, quantity FROM OrderItem";
                 using (MySqlCommand cmd = new MySqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -29,17 +29,17 @@ namespace foodies_app.Data.Repositories
                         while (sdr.Read())
                         {
                             int id = sdr["id"].GetHashCode();
-                            int quantity = sdr["title"].GetHashCode();
-                            decimal total = sdr["artist"].GetHashCode();
-                            OrderItem orderItem = new OrderItem(id, quantity, total);
-                            OrderItems.Add(orderItem);
+                            int productid = sdr["productid"].GetHashCode();
+                            int quantity = sdr["quantity"].GetHashCode();
+                            OrderItem orderItem = new OrderItem(id, productid, quantity);
+                            Order.Add(orderItem);
                         }
                     }
 
                     con.Close();
                 }
             }
-            return OrderItems;
+            return Order;
         }
 
         public async Task<IEnumerable<Order>> ConfirmOrder()
@@ -49,14 +49,13 @@ namespace foodies_app.Data.Repositories
                 if (con.State == ConnectionState.Closed)
                     con.Open();
 
-                using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Order (id, quantity, total) VALUES (@title, @artist, @link, @created)"))
+                using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Order (id, productid, quantity) VALUES (@id, @productid, @quantity)"))
                 {
                     using (MySqlDataAdapter sda = new MySqlDataAdapter())
                     {
-                        cmd.Parameters.AddWithValue("@title", title);
-                        cmd.Parameters.AddWithValue("@artist", artist);
-                        cmd.Parameters.AddWithValue("@link", link);
-                        cmd.Parameters.AddWithValue("@created", created);
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.Parameters.AddWithValue("@productid", productid);
+                        cmd.Parameters.AddWithValue("@quantity", quantity);
                         cmd.Connection = con;
                         cmd.ExecuteNonQuery();
                         con.Close();
