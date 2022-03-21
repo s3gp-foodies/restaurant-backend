@@ -1,5 +1,6 @@
 ﻿using foodies_app.Entities;
 using foodies_app.Interfaces;
+using foodies_app.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data.Repositories

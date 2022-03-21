@@ -1,6 +1,7 @@
 ﻿using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Interfaces;
+using foodies_app.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

@@ -2,6 +2,7 @@ using foodies_app.Data;
 using foodies_app.Data.Repositories;
 using foodies_app.Helpers;
 using foodies_app.Interfaces;
+using foodies_app.Interfaces.Repositories;
 using foodies_app.Services;
 using Microsoft.EntityFrameworkCore;
 
