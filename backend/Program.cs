@@ -2,6 +2,7 @@ using foodies_app.Data;
 using foodies_app.Entities;
 using foodies_app.Extensions;
 using foodies_app.Middleware;
+using foodies_app.SignalR;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,6 +61,6 @@ app.UseAuthorization();
 
 //Add different endpoints
 app.MapControllers();
-// app.MapHub<PresenceHub>("hubs/presence"); - this is for adding websocket hubs
+app.MapHub<TableHub>("hubs/table"); 
 
 app.Run();
