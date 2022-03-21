@@ -6,8 +6,8 @@
     "\\backend\\Data",
     "\\backend\\Data\\Repositories",
     "\\backend\\Entities",
-    "\\backend\\Interfaces"
+    "\\backend\\Interfaces",
+    "\\backend\\SignalR"
   ],
-  "SelectedNode": "\\backend\\Interfaces\\IRepositoryOrder.cs",
   "PreviewInSolutionExplorer": false
 }

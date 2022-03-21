@@ -8,6 +8,13 @@
 
         public  Status Status{ get; set; }
         public virtual MenuItem Item { get; set; }
+        
+        public OrderItem(int id, int quantity, decimal total)
+        {
+            this.id = id;
+            this.quantity = quantity;
+            this.total = total;
+        }
     }
     public enum Status
     {

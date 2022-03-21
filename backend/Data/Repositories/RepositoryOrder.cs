@@ -1,21 +1,20 @@
-﻿using foodies_app.Entities.OrderItem;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Dapper;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using MySql.Data.MySqlClient;
+using foodies_app.Entities;
 
 namespace foodies_app.Data.Repositories
 {
     public class RepositoryOrder
     {
 
-        public async Task<IEnumerable<Order>> GetOrder()
+        public void GetOrder()
         {
-            List OrderItems = new List<OrderItem>();
-            using (MySqlConnection con = Helper.MySqlConnect.Connection)
+            List<OrderItem> OrderItems = new List<OrderItem>();
+            using (MySqlConnection con = DataContext.MySqlConnect.Connection)
             {
                 if (con.State == ConnectionState.Closed)
                     con.Open();
@@ -39,12 +38,12 @@ namespace foodies_app.Data.Repositories
                     con.Close();
                 }
             }
-            return OrderItems;
+            return (IEnumerable<Order>)OrderItems;
         }
 
-        public async Task<IEnumerable<Order>> AddOrder(int id, int itemid, int quantity, decimal total)
+        public IEnumerable<Order> AddOrder(int id, int itemid, int quantity, decimal total)
         {
-            using (MySqlConnection con = Helper.MySqlConnect.Connection)
+            using (MySqlConnection con = DataContext.MySqlConnect.Connection)
             {
                 if (con.State == ConnectionState.Closed)
                     con.Open();
@@ -65,6 +64,6 @@ namespace foodies_app.Data.Repositories
                 return;
             }
         }
-       
+
     }
 }
