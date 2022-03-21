@@ -30,8 +30,8 @@ namespace foodies_app.Controllers
         // POST: api/<OrderController>
         public IEnumerable<string> ConfirmOrder(List<Order> Order)
         {
-            Order = RepositoryOrder.GetOrder;
-            foreach(var Orderitem in Order)
+            var OrderItems = RepositoryOrder.GetOrder;
+            foreach(var Orderitem in OrderItems)
             {
             // Int ID is voor de bestelling, niet het ID dat bij het orderitem hoort
             int id = 0;

@@ -38,7 +38,7 @@ namespace foodies_app.Data.Repositories
                     con.Close();
                 }
             }
-            return (IEnumerable<Order>)OrderItems;
+            return;
         }
 
         public IEnumerable<Order> AddOrder(int id, int itemid, int quantity, decimal total)
