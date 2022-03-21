@@ -28,16 +28,15 @@ namespace foodies_app.Controllers
         public IEnumerable<string> ConfirmOrder(list Order)
         {
             Order = repositoryOrder.GetOrder;
-            foreach( in Order)
+            foreach(var Orderitem in Order)
             {
-
-            }
+            // Int ID is voor de bestelling, niet het ID dat bij het orderitem hoort
             int id = 0;
-            string title = txtTitle;
-            string artist = txtArtist;
-            string link = txtLink;
-            DateTime created = DateTime.Now;
-            Albumlogic.AddAlbum(id, title, artist, link, created);
+            int itemid = Orderitem.id;
+            int quantity = Orderitem.quantity;
+            decimal total = Orderitem.total;
+            repositoryOrder.AddOrder(id, itemid, quantity, total);
+            }
             return RedirectToAction("index");
         }
 

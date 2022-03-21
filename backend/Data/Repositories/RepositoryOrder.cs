@@ -29,8 +29,8 @@ namespace foodies_app.Data.Repositories
                         while (sdr.Read())
                         {
                             int id = sdr["id"].GetHashCode();
-                            int quantity = sdr["title"].GetHashCode();
-                            decimal total = sdr["artist"].GetHashCode();
+                            int quantity = sdr["quantity"].GetHashCode();
+                            decimal total = sdr["total"].GetHashCode();
                             OrderItem orderItem = new OrderItem(id, quantity, total);
                             OrderItems.Add(orderItem);
                         }
@@ -42,21 +42,21 @@ namespace foodies_app.Data.Repositories
             return OrderItems;
         }
 
-        public async Task<IEnumerable<Order>> ConfirmOrder()
+        public async Task<IEnumerable<Order>> AddOrder(int id, int itemid, int quantity, decimal total)
         {
             using (MySqlConnection con = Helper.MySqlConnect.Connection)
             {
                 if (con.State == ConnectionState.Closed)
                     con.Open();
 
-                using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Order (id, quantity, total) VALUES (@title, @artist, @link, @created)"))
+                using (MySqlCommand cmd = new MySqlCommand("INSERT INTO Order (id, itemid, quantity, total) VALUES (@id, @itemid, @quantity, @total)"))
                 {
                     using (MySqlDataAdapter sda = new MySqlDataAdapter())
                     {
-                        cmd.Parameters.AddWithValue("@title", title);
-                        cmd.Parameters.AddWithValue("@artist", artist);
-                        cmd.Parameters.AddWithValue("@link", link);
-                        cmd.Parameters.AddWithValue("@created", created);
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.Parameters.AddWithValue("@itemid", itemid);
+                        cmd.Parameters.AddWithValue("@quantity", quantity);
+                        cmd.Parameters.AddWithValue("@total", total);
                         cmd.Connection = con;
                         cmd.ExecuteNonQuery();
                         con.Close();
@@ -65,5 +65,6 @@ namespace foodies_app.Data.Repositories
                 return;
             }
         }
+       
     }
 }
