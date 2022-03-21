@@ -20,7 +20,7 @@ namespace foodies_app.Controllers
         // GET: api/<MenuItemController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MenuItem>>> GetAll()
-        {
+        { 
             return NotImplementedException(); //(IEnumerable<MenuItem>)_repositoryMenuItems.GetMenuItems();
         }
 
@@ -63,7 +63,12 @@ namespace foodies_app.Controllers
         public async void Delete(int id)
         {
             var item = await _menuItemRepository.GetMenuItem(id);
-            _menuItemRepository.Delete(item);
+            if (item != null)
+            {
+                _menuItemRepository.Delete(item);
+            }
+            //else send not succeeded or item not found respond
+            
         }
     }
 }

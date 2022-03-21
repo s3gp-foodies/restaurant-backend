@@ -16,17 +16,18 @@ namespace foodies_app.Data.Repositories
 
         public void Add(MenuItem item)
         {
-            throw new NotImplementedException();
+            _context.MenuItems.Add(item);
         }
 
         public void Delete(MenuItem item)
         {
-            throw new NotImplementedException();
+            _context.MenuItems.Remove(item);
         }
 
         public void Edit(MenuItem item)
         {
-            throw new NotImplementedException();
+            _context.MenuItems.Update(item);
+            _context.SaveChanges();
         }
 
         public async Task<MenuItem> GetMenuItem(int id)
