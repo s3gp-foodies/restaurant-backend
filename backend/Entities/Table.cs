@@ -2,7 +2,7 @@
 {
     public class Table
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public int TableNumber { get; set; }
         public bool Occupied { get; set; }
     }

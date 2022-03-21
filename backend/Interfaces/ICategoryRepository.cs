@@ -5,7 +5,7 @@ namespace foodies_app.Interfaces
     public interface ICategoryRepository
     {
         Task<IEnumerable<Category>> GetCategories();
-        Task<Category> GetCategory(Guid id);
+        Category GetCategory(int id);
         void Add(Category item);
         void Delete(Category item);
         void Edit(Category item);

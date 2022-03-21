@@ -6,8 +6,8 @@ namespace foodies_app.Data;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 
-public class DataContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUserClaim<Guid>, AppUserRole,
-    IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
+public class DataContext : IdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>, AppUserRole,
+    IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
 {
     public DataContext(DbContextOptions options) : base(options)
     {

@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddCors();
 builder.Services.AddScoped<DataContext, DataContext>();
 builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddIdentityServices(builder.Configuration);
 
 builder.Services.AddSignalR();
@@ -45,7 +46,7 @@ app.UseWebSockets(webSocketOptions);
 app.UseWebSockets();
 
 //Request config
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseCors(policy => policy.AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials()

@@ -30,7 +30,7 @@ namespace foodies_app.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<OrderItem?> GetOrderItem(Guid id)
+        public async Task<OrderItem?> GetOrderItem(int id)
         {
             return await _context.OrderItems.FirstOrDefaultAsync(x => x.Id == id);
         }

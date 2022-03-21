@@ -5,14 +5,20 @@ namespace foodies_app.Data.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {
+        private readonly DataContext _context;
+
+        public CategoryRepository(DataContext db)
+        {
+            _context= db;
+        }
         public Task<IEnumerable<Category>> GetCategories()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Category> GetCategory(Guid id)
+        public Category GetCategory(int id)
         {
-            throw new NotImplementedException();
+           return _context.Categories.FirstOrDefault(x => x.Id == id);
         }
 
         public void Add(Category item)

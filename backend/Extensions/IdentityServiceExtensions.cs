@@ -33,7 +33,7 @@ public static class IdentityServiceExtensions
                     ValidateIssuer = false, //Would validate the server 
                     ValidateAudience = false //Would validate the Angular app
                 };
-
+        
                 //For SignalR validation
                 options.Events = new JwtBearerEvents
                 {
@@ -41,12 +41,12 @@ public static class IdentityServiceExtensions
                     {
                         var accessToken = context.Request.Query["access_token"];
                         var path = context.HttpContext.Request.Path;
-
+        
                         if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
                         {
                             context.Token = accessToken;
                         }
-
+        
                         return Task.CompletedTask;
                     }
                 };

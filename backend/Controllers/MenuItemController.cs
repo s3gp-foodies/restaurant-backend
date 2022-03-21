@@ -1,4 +1,5 @@
-﻿using foodies_app.Entities;
+﻿using foodies_app.DTOs;
+using foodies_app.Entities;
 using foodies_app.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,13 +39,15 @@ namespace foodies_app.Controllers
 
         // POST api/<MenuItemController>
         [HttpPost]
-        public void Post([FromBody] MenuItem value)
+        public void Post([FromBody] MenuItemsDTO value)
         {
-            if (value.Description != null)
-            {
-                _menuItemRepository.Add(value);
-            }
-            else BadRequest("Description of item is empty");
+            // if (value.Description != null)
+            // {
+            MenuItem item = new MenuItem(value);
+            
+            _menuItemRepository.Add(item);
+
+            //}
         }
 
         // PUT api/<MenuItemController>/5
