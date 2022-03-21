@@ -28,8 +28,7 @@ var app = builder.Build();
 if (args.Length == 1 && args[0].ToLower() == "seed")
 {
     using var scope = app.Services.CreateScope();
-    await Seed.SeedUsers(scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>(),
-        scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>());
+    await Seed.Run(scope);
 }
 
 //Configure app UNDER this line

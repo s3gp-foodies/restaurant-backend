@@ -6,9 +6,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data;
 
-public class Seed
+public static class Seed
 {
-    public static async Task SeedUsers(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+    //Add new seeds by creating a seed data file Data/SeedData/*.json
+    //and creating a Seed* method that takes the relevant services as parameters.
+    public static async Task Run(IServiceScope scope)
+    {
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
+
+        await SeedUsers(userManager, roleManager);
+    }
+
+    private static async Task SeedUsers(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
     {
         if (await userManager.Users.AnyAsync()) return;
 
@@ -37,4 +47,5 @@ public class Seed
             await userManager.AddToRoleAsync(appUser, user.Role);
         }
     }
+    
 }
