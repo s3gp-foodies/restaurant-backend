@@ -15,13 +15,13 @@ up:
 migration: $(migration)
 	dotnet ef migrations add $(m)
 
-db update:
+db-update:
 	 dotnet ef database update
  
-db reset:
+db-reset:
 	dotnet ef database drop
 	make db-update
 
 seed:
-	make reset
+	make db-reset
 	dotnet run seed
