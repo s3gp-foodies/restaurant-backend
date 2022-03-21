@@ -27,7 +27,7 @@ namespace foodies_app.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<AppUser?> GetUser(Guid id)
+        public async Task<AppUser?> GetUser(int id)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }

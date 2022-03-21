@@ -10,7 +10,7 @@ namespace foodies_app.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Allergy> GetAllergyCategory(Guid id)
+        public Task<Allergy> GetAllergyCategory(int id)
         {
             throw new NotImplementedException();
         }

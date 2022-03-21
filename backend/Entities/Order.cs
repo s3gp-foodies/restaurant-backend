@@ -2,9 +2,10 @@
 {
     public class Order
     {
-        public Guid Id { get; set; }
-        public DateTime OrderDate { get; set; }   
-        
+        public int Id { get; set; }
+        public DateTime OrderDate { get; set; }
+        public Session Session { get; set; }
+        public int SessionId { get; set; }
         public bool Completed { get; set; }
         public virtual Table Table { get; set; }    
 

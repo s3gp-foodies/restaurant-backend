@@ -10,7 +10,7 @@ namespace foodies_app.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Category> GetCategory(Guid id)
+        public Task<Category> GetCategory(int id)
         {
             throw new NotImplementedException();
         }

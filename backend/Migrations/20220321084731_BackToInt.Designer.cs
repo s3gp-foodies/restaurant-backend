@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using foodies_app.Data;
 
@@ -10,9 +11,10 @@ using foodies_app.Data;
 namespace foodies_app.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220321084731_BackToInt")]
+    partial class BackToInt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.3");
@@ -193,15 +195,10 @@ namespace foodies_app.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SessionId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("TableId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SessionId");
 
                     b.HasIndex("TableId");
 
@@ -231,29 +228,6 @@ namespace foodies_app.Migrations
                     b.HasIndex("ItemId");
 
                     b.ToTable("OrderItems");
-                });
-
-            modelBuilder.Entity("foodies_app.Entities.Session", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("End")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Start")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Session");
                 });
 
             modelBuilder.Entity("foodies_app.Entities.Table", b =>
@@ -396,19 +370,11 @@ namespace foodies_app.Migrations
 
             modelBuilder.Entity("foodies_app.Entities.Order", b =>
                 {
-                    b.HasOne("foodies_app.Entities.Session", "Session")
-                        .WithMany("Orders")
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("foodies_app.Entities.Table", "Table")
                         .WithMany()
                         .HasForeignKey("TableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Session");
 
                     b.Navigation("Table");
                 });
@@ -422,17 +388,6 @@ namespace foodies_app.Migrations
                         .IsRequired();
 
                     b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("foodies_app.Entities.Session", b =>
-                {
-                    b.HasOne("foodies_app.Entities.AppUser", "User")
-                        .WithOne("Session")
-                        .HasForeignKey("foodies_app.Entities.Session", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -478,19 +433,12 @@ namespace foodies_app.Migrations
 
             modelBuilder.Entity("foodies_app.Entities.AppUser", b =>
                 {
-                    b.Navigation("Session");
-
                     b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("foodies_app.Entities.MenuItem", b =>
                 {
                     b.Navigation("Allergy");
-                });
-
-            modelBuilder.Entity("foodies_app.Entities.Session", b =>
-                {
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

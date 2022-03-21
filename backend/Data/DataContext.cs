@@ -6,15 +6,15 @@ namespace foodies_app.Data;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 
-public class DataContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUserClaim<Guid>, AppUserRole,
-    IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
+public class DataContext : IdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>, AppUserRole,
+    IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
 {
     public DataContext(DbContextOptions options) : base(options)
     {
     }
-    
+
     public DbSet<Allergy> Allergies { get; set; }
-    
+
     public DbSet<Category> Categories { get; set; }
     public DbSet<MenuItem> MenuItems { get; set; }
 
@@ -37,5 +37,12 @@ public class DataContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUse
             .WithOne(u => u.Role)
             .HasForeignKey(r => r.RoleId)
             .IsRequired();
+
+        builder.Entity<Session>()
+            .HasOne(s => s.User)
+            .WithOne(u => u.Session);
+        builder.Entity<Session>()
+            .HasMany(s => s.Orders)
+            .WithOne(o => o.Session);
     }
 }

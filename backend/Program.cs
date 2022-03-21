@@ -1,5 +1,8 @@
+using foodies_app.Data;
+using foodies_app.Entities;
 using foodies_app.Extensions;
 using foodies_app.Middleware;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,14 @@ builder.Services.AddSwaggerGen();
 
 //Add services ABOVE this line
 var app = builder.Build();
+
+
+if (args.Length == 1 && args[0].ToLower() == "seed")
+{
+    using var scope = app.Services.CreateScope();
+    await Seed.SeedUsers(scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>(),
+        scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>());
+}
 
 //Configure app UNDER this line
 app.UseMiddleware<ExceptionMiddleware>();
