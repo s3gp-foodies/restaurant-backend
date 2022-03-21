@@ -12,9 +12,9 @@ public class DataContext : IdentityDbContext<AppUser, AppRole, int, IdentityUser
     public DataContext(DbContextOptions options) : base(options)
     {
     }
-    
+
     public DbSet<Allergy> Allergies { get; set; }
-    
+
     public DbSet<Category> Categories { get; set; }
     public DbSet<MenuItem> MenuItems { get; set; }
 
@@ -37,5 +37,12 @@ public class DataContext : IdentityDbContext<AppUser, AppRole, int, IdentityUser
             .WithOne(u => u.Role)
             .HasForeignKey(r => r.RoleId)
             .IsRequired();
+
+        builder.Entity<Session>()
+            .HasOne(s => s.User)
+            .WithOne(u => u.Session);
+        builder.Entity<Session>()
+            .HasMany(s => s.Orders)
+            .WithOne(o => o.Session);
     }
 }
