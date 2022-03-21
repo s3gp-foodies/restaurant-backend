@@ -34,4 +34,17 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20220315123444_RefactorRepositoriesAndDatasets.cs" />
+    <Compile Remove="Migrations\20220315123444_RefactorRepositoriesAndDatasets.Designer.cs" />
+    <Compile Remove="Migrations\20220321084731_BackToInt.Designer.cs" />
+    <Compile Remove="Migrations\20220321092156_AddedTableSessions.Designer.cs" />
+    <Compile Remove="Migrations\20220321092156_AddedTableSessions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="food.db-wal" />
+    <None Remove="food.db-shm" />
+  </ItemGroup>
+
 </Project>

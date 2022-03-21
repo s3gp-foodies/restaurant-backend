@@ -13,10 +13,6 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddCors();
 
-builder.Services.AddScoped<DataContext, DataContext>();
-builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-
 builder.Services.AddIdentityServices(builder.Configuration);
 
 builder.Services.AddSignalR();

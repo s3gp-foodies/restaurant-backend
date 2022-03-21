@@ -18,6 +18,9 @@ public static class ApplicationServiceExtensions
         //AddScoped means that the service exists for the duration of the HTTP request
         services.AddScoped<IMenuItemRepository, MenuItemRepository>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+
         
         //Add the database context
         services.AddDbContext<DataContext>(options =>
