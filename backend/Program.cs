@@ -1,5 +1,9 @@
+using foodies_app.Data;
+using foodies_app.Data.Repositories;
 using foodies_app.Extensions;
+using foodies_app.Interfaces;
 using foodies_app.Middleware;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +13,8 @@ builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddCors();
-
+builder.Services.AddScoped<DataContext, DataContext>();
+builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
 builder.Services.AddIdentityServices(builder.Configuration);
 
 builder.Services.AddSignalR();

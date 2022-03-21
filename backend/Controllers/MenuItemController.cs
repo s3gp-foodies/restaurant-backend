@@ -31,7 +31,7 @@ namespace foodies_app.Controllers
 
         // GET api/<MenuItemController>/5
         [HttpGet("{id}")]
-        public async Task<MenuItem> Get(Guid id)
+        public async Task<MenuItem> Get(int id)
         {
             return await _menuItemRepository.GetMenuItem(id);
         }
@@ -49,7 +49,7 @@ namespace foodies_app.Controllers
 
         // PUT api/<MenuItemController>/5
         [HttpPut("{id}")]
-        public async void Put(Guid id, [FromBody] MenuItem menuitem)
+        public async void Put(int id, [FromBody] MenuItem menuitem)
         {
             var item = await _menuItemRepository.GetMenuItem(id);
             if (item.Description != null)
@@ -60,7 +60,7 @@ namespace foodies_app.Controllers
 
         // DELETE api/<MenuItemController>/5
         [HttpDelete("{id}")]
-        public async void Delete(Guid id)
+        public async void Delete(int id)
         {
             var item = await _menuItemRepository.GetMenuItem(id);
             _menuItemRepository.Delete(item);
