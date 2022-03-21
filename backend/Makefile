@@ -23,4 +23,5 @@ db reset:
 	make db-update
 
 seed:
+	make reset
 	dotnet run seed
