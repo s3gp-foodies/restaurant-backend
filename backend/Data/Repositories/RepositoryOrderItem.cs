@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data.Repositories
 {
-    public class RepositoryOrderItem : IRepositoryOrderItems
+    public class RepositoryOrderItem : IRepositoryOrderItem
     {
         private readonly DataContext _context;
 
@@ -34,5 +34,9 @@ namespace foodies_app.Data.Repositories
             return await _context.OrderItems.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public Task<IEnumerable<OrderItem>> GetOrderItems()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

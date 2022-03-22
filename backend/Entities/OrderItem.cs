@@ -11,9 +11,9 @@
         
         public OrderItem(int id, int quantity, decimal total)
         {
-            this.id = id;
-            this.quantity = quantity;
-            this.total = total;
+            this.Id = id;
+            this.Quantity = quantity;
+            this.Total = total;
         }
     }
     public enum Status

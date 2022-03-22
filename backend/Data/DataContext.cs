@@ -42,6 +42,8 @@
         public DbSet<User> Users { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<Category> Categorys { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<AllergyCategory> Allergys { get; set; }
         public string DbPath { get; }

@@ -21,24 +21,29 @@ namespace foodies_app.Controllers
                         
         // GET: api/<OrderController>
         [HttpGet]
-        public IEnumerable<string> GetOrder()
+        public List<OrderItem> GetOrder()
         {
-            var OrderList = RepositoryOrder.GetOrder;
-            return View(OrderList);
+            List<OrderItem> OrderList = _repositoryOrder.GetOrder();
+            return OrderList;
         }
 
+        //public async Task<ActionResult<IEnumerable<OrderItem>>> GetOrder2(IRepositoryOrder _repositoryOrder)
+        //{
+        //    return await _repositoryOrder.GetOrder();
+        //}
+
         // POST: api/<OrderController>
-        public IEnumerable<string> ConfirmOrder(List<Order> Order)
+        public ActionResult ConfirmOrder()
         {
-            var OrderItems = RepositoryOrder.GetOrder;
+            List<OrderItem> OrderItems = _repositoryOrder.GetOrder();
             foreach(var Orderitem in OrderItems)
             {
             // Int ID is voor de bestelling, niet het ID dat bij het orderitem hoort
             int id = 0;
-            int itemid = Orderitem.id;
-            int quantity = Orderitem.quantity;
-            decimal total = Orderitem.total;
-            repositoryOrder.AddOrder(id, itemid, quantity, total);
+            int itemid = Orderitem.Id;
+            int quantity = Orderitem.Quantity;
+            decimal total = Orderitem.Total;
+            _repositoryOrder.AddOrder(id, itemid, quantity, total);
             }
             return RedirectToAction("index");
         }

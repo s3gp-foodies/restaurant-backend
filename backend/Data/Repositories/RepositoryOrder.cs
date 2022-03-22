@@ -11,7 +11,7 @@ namespace foodies_app.Data.Repositories
     public class RepositoryOrder
     {
 
-        public void GetOrder()
+        public List<OrderItem> GetOrder()
         {
             List<OrderItem> OrderItems = new List<OrderItem>();
             using (MySqlConnection con = DataContext.MySqlConnect.Connection)
@@ -38,10 +38,10 @@ namespace foodies_app.Data.Repositories
                     con.Close();
                 }
             }
-            return;
+            return OrderItems;
         }
 
-        public IEnumerable<Order> AddOrder(int id, int itemid, int quantity, decimal total)
+        public void AddOrder(int id, int itemid, int quantity, decimal total)
         {
             using (MySqlConnection con = DataContext.MySqlConnect.Connection)
             {
