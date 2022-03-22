@@ -19,11 +19,10 @@ namespace foodies_app.Data.Repositories
             _categoryRepository = categoryRepository;
         }
 
-        public void Add(MenuItem item)
+        public void Add(MenuItem item, int menuItemCategoryId)
         {
             // fix needed how to fill in category
-            Category category = _categoryRepository.GetCategory(1);
-            item.Category = category;
+            item.Category = _categoryRepository.GetCategory(menuItemCategoryId);
             _context.MenuItems.Add(item);
             _context.SaveChanges();
         }
@@ -46,10 +45,9 @@ namespace foodies_app.Data.Repositories
             return await _context.MenuItems.Include("Category").FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<MenuItem>> GetMenuItems()
+        public List<MenuItem> GetMenuItems()
         {
-            List<MenuItem> items = _context.MenuItems.ToList();
-            return await ;
+            return _context.MenuItems.ToList();
         }
     }
 }

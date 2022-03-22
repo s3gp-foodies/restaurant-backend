@@ -16,10 +16,10 @@ public static class Seed
     {
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
-        //var categoryRepository = scope.ServiceProvider.GetRequiredService<ICategoryRepository>();
+        var categoryRepository = scope.ServiceProvider.GetRequiredService<ICategoryRepository>();
         var menuItemRepository = scope.ServiceProvider.GetRequiredService<IMenuItemRepository>();
         await SeedUsers(userManager, roleManager);
-        //await SeedCategories(categoryRepository);
+        await SeedCategories(categoryRepository);
         await SeedMenuItems(menuItemRepository);
     }
 
@@ -38,12 +38,17 @@ public static class Seed
     private static async Task SeedMenuItems(IMenuItemRepository menuItemRepository)
     {
         var MenuItemData = await File.ReadAllTextAsync("Data/SeedData/MenuItemSeedData.json");
-        var MenuItems = JsonSerializer.Deserialize<List<MenuItemsDTO>>(MenuItemData);
+        var MenuItems = JsonSerializer.Deserialize<List<CreateMenuItemDto>>(MenuItemData);
 
         foreach (var menuItem in MenuItems)
         {
-            MenuItem item = new MenuItem(menuItem);
-            menuItemRepository.Add(item);
+            MenuItem item = new MenuItem
+            {
+                Description = menuItem.Description,
+                Title = menuItem.Title,
+                Price = menuItem.Price
+            };
+            menuItemRepository.Add(item, menuItem.CategoryId);
         }
     }
 

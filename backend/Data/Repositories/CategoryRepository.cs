@@ -1,5 +1,6 @@
 ﻿using foodies_app.Entities;
 using foodies_app.Interfaces;
+using System.Collections.Generic;
 
 namespace foodies_app.Data.Repositories
 {
@@ -11,10 +12,9 @@ namespace foodies_app.Data.Repositories
         {
             _context= db;
         }
-        public Task<IEnumerable<Category>> GetCategories()
+        public List<Category> GetCategories()
         {
-            _context.Categories
-            throw new NotImplementedException();
+           return _context.Categories.ToList();
         }
 
         public Category GetCategory(int id)
