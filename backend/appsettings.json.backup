@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "DatabaseConnection": "REPLACE-WITH-SOURCE"
+    "DatabaseConnection": "Data source=food.db"
   },
   "Logging": {
     "LogLevel": {

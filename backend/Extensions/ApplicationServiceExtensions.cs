@@ -2,6 +2,8 @@ using foodies_app.Data;
 using foodies_app.Data.Repositories;
 using foodies_app.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace foodies_app.Extensions;
 

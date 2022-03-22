@@ -1,9 +1,13 @@
+using System;
 using foodies_app.Data;
 using foodies_app.Data.Repositories;
 using foodies_app.Extensions;
 using foodies_app.Interfaces;
 using foodies_app.Middleware;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,4 +1,7 @@
-﻿using foodies_app.Entities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using foodies_app.Entities;
 using foodies_app.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,9 +30,9 @@ namespace foodies_app.Data.Repositories
 
         public void Delete(MenuItem item)
         { 
-            MenuItem menuItem =_context.MenuItems.Find(item);
-            _context.MenuItems.Remove(menuItem);
-            _context.SaveChanges();
+            // MenuItem menuItem =_context.MenuItems.Find(item);
+            // _context.MenuItems.Remove(menuItem);
+            // _context.SaveChanges();
         }
 
         public void Edit(MenuItem item)
@@ -43,9 +46,10 @@ namespace foodies_app.Data.Repositories
             return await _context.MenuItems.Include("Category").FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<MenuItem?>> GetMenuItems()
+        public async Task<List<MenuItem>> GetMenuItems()
         {
-            return await _context.MenuItems.ToListAsync();
+            List<MenuItem> items = _context.MenuItems.ToList();
+            return await ;
         }
     }
 }

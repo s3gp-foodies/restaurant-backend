@@ -1,4 +1,6 @@
-﻿using foodies_app.DTOs;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -20,14 +22,9 @@ namespace foodies_app.Controllers
 
         // GET: api/<MenuItemController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MenuItem>>> GetAll()
-        { 
-            return NotImplementedException(); //(IEnumerable<MenuItem>)_repositoryMenuItems.GetMenuItems();
-        }
-
-        private ActionResult<IEnumerable<MenuItem>> NotImplementedException()
+        public async Task<List<MenuItem>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _menuItemRepository.GetMenuItems();
         }
 
         // GET api/<MenuItemController>/5
