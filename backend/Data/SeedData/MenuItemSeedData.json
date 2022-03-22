@@ -1,0 +1,26 @@
+﻿[
+  {
+    "Title": "Caeser salad",
+    "Description": "salad made like how the greeks made it.",
+    "Price": 10.50,
+    "CategoryId": 1
+  },
+  {
+    "Title": "classic burger",
+    "Description": "classic american style burger with cheese.",
+    "Price": 14.50,
+    "CategoryId": 2
+  },
+  {
+    "Title": "oreo ice cream",
+    "Description": "delicious oreo ice cream topped with a cherry.",
+    "Price": 5.95,
+    "CategoryId": 3
+  },
+  {
+    "Title": "coca cola",
+    "Description": "delicious cold coca cola.",
+    "Price": 2.95,
+    "CategoryId": 4
+  }
+]

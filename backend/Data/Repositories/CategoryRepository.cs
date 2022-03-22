@@ -13,6 +13,7 @@ namespace foodies_app.Data.Repositories
         }
         public Task<IEnumerable<Category>> GetCategories()
         {
+            _context.Categories
             throw new NotImplementedException();
         }
 
@@ -23,17 +24,20 @@ namespace foodies_app.Data.Repositories
 
         public void Add(Category item)
         {
-            throw new NotImplementedException();
+            _context.Categories.Add(item);
+            _context.SaveChanges();
         }
 
         public void Delete(Category item)
         {
-            throw new NotImplementedException();
+            _context.Categories.Remove(item);
+            _context.SaveChanges();
         }
 
         public void Edit(Category item)
         {
-            throw new NotImplementedException();
+            _context.Categories.Update(item);
+            _context.SaveChanges();
         }
     }
 }
