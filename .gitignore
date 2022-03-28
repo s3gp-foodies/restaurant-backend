@@ -597,6 +597,4 @@ FodyWeavers.xsd
 appsettings.json
 **/.idea/
 .idea/
-
-/food.db-shm
-/food.db-wal
+**/*.db
