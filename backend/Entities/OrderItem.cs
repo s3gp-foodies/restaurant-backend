@@ -6,7 +6,7 @@
         public int Quantity { get; set; }
         public decimal Total { get; set; }
 
-        public  Status Status{ get; set; }
+        public Status Status{ get; set; }
         public virtual MenuItem Item { get; set; }
         
         public OrderItem(int id, int quantity, decimal total)
