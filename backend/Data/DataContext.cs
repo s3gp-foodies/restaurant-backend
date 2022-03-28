@@ -56,6 +56,8 @@ public class DataContext : IdentityDbContext<AppUser, AppRole, int, IdentityUser
         builder.Entity<OrderItem>()
             .HasOne(i => i.Order)
             .WithMany(o => o.Items);
+
+        builder.Entity<OrderItem>().HasOne(o => o.MenuItem);
         
         
         builder.ApplyUtcDateTimeConverter();
