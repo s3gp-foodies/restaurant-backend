@@ -1,4 +1,6 @@
-﻿using foodies_app.DTOs;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Interfaces;
 using foodies_app.Interfaces.Repositories;
@@ -21,14 +23,9 @@ namespace foodies_app.Controllers
 
         // GET: api/<MenuItemController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MenuItem>>> GetAll()
-        { 
-            return NotImplementedException(); //(IEnumerable<MenuItem>)_repositoryMenuItems.GetMenuItems();
-        }
-
-        private ActionResult<IEnumerable<MenuItem>> NotImplementedException()
+        public List<MenuItem> GetAll()
         {
-            throw new NotImplementedException();
+            return  _menuItemRepository.GetMenuItems();
         }
 
         // GET api/<MenuItemController>/5
@@ -40,14 +37,19 @@ namespace foodies_app.Controllers
 
         // POST api/<MenuItemController>
         [HttpPost]
-        public void Post([FromBody] MenuItemsDTO value)
+        public void Post([FromBody] CreateMenuItemDto menuItemDto)
         {
             // if (value.Description != null)
             // {
-            MenuItem item = new MenuItem(value);
+            MenuItem item = new MenuItem
+            {
+                Description = menuItemDto.Description,
+                Title = menuItemDto.Title,
+                Price = menuItemDto.Price
+                
+            };
             
-            _menuItemRepository.Add(item);
-
+            _menuItemRepository.Add(item, menuItemDto.CategoryId);
             //}
         }
 
@@ -58,7 +60,8 @@ namespace foodies_app.Controllers
             var item = await _menuItemRepository.GetMenuItem(id);
             if (item.Description != null)
             {
-                _menuItemRepository.Add(menuitem);
+                // _menuItemRepository.Add(menuitem);
+                throw new NotImplementedException();
             }
         }
 

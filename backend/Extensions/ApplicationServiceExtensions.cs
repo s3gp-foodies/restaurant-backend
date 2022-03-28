@@ -5,6 +5,8 @@ using foodies_app.Interfaces;
 using foodies_app.Interfaces.Repositories;
 using foodies_app.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace foodies_app.Extensions;
 
