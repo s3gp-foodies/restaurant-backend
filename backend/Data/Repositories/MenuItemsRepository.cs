@@ -47,7 +47,7 @@ namespace foodies_app.Data.Repositories
 
         public List<MenuItem> GetMenuItems()
         {
-            return _context.MenuItems.ToList();
+            return _context.MenuItems.Include("Category").ToList();
         }
     }
 }
