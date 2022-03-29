@@ -22,11 +22,11 @@ namespace Back_End_Testing
         }
 
         [Test]
-        public void Test1()
+        public async void Test1()
         {
-            var controller = new MenuItemController(_iMenuItemRepo);
-            List<MenuItem>  items = controller.GetAll();
-            Assert.Equals(items.Capacity, 0);
+            MenuItemController controller = new MenuItemController(_iMenuItemRepo);
+            MenuItem items =await controller.Get(1);
+            Assert.Equals(items.Id, 1);
         }
     }
 }
