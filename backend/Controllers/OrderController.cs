@@ -26,7 +26,14 @@ public class OrderController : BaseApiController
         if (order == null) return BadRequest("No orders found for session");
         return _mapper.Map<List<OrderItem>, List<GetOrderItemDto>>(order.Items);
     }
-    
+
+    public async Task<ActionResult<List<GetOrderItemDto>>> FetchOrders(int sessionId)
+    {
+        var order = await _orderRepository.GetSessionOrder(sessionId);
+        if (order == null) return BadRequest("No orders found for session");
+        return _mapper.Map<List<OrderItem>, List<GetOrderItemDto>>(order.Items);
+    }
+
     [HttpPut("confirm/{orderId}")]
     public async Task<ActionResult> ConfirmOrder(int orderId)
     {
