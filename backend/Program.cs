@@ -52,15 +52,20 @@ app.UseWebSockets();
 
 //Request config
 // app.UseHttpsRedirection();
-app.UseCors(policy => policy.AllowAnyHeader()
+app.UseCors(policy => policy
+    .WithOrigins("https://localhost:8080")
     .AllowAnyMethod()
-    .AllowCredentials()
-    .WithOrigins("https://localhost:8080"));
+    .AllowAnyHeader()
+    .AllowCredentials());
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
 //Add different endpoints
-app.MapControllers();
-app.MapHub<TableHub>("hubs/table"); 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<TableHub>("hubs/table"); 
+});
 
 app.Run();
