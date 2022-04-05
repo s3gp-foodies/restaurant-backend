@@ -8,11 +8,11 @@ using foodies_app.Data;
 
 #nullable disable
 
-namespace foodies_app.Migrations
+namespace foodies_app.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220321112056_ResetMigrations")]
-    partial class ResetMigrations
+    [Migration("20220405080847_NewMigrationToFixSessions")]
+    partial class NewMigrationToFixSessions
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -256,7 +256,7 @@ namespace foodies_app.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Session");
+                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("foodies_app.Entities.Table", b =>

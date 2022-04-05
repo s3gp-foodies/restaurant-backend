@@ -48,7 +48,6 @@ var webSocketOptions = new WebSocketOptions
     KeepAliveInterval = TimeSpan.FromMinutes(2)
 };
 app.UseWebSockets(webSocketOptions);
-app.UseWebSockets();
 
 //Request config
 // app.UseHttpsRedirection();
@@ -58,14 +57,12 @@ app.UseCors(policy => policy
     .AllowAnyHeader()
     .AllowCredentials());
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 //Add different endpoints
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-    endpoints.MapHub<TableHub>("hubs/table"); 
-});
+app.MapControllers();
+app.MapHub<TableHub>("hubs/table"); 
 
 app.Run();

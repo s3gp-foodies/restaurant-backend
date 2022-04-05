@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace foodies_app.SignalR;
 
-[Authorize(Policy = "IsTable")]
+//[Authorize(Policy = "IsTable", Roles = "Admin")]
 public class TableHub : Hub
 {
     private readonly UserManager<AppUser> _userManager;
@@ -30,7 +30,8 @@ public class TableHub : Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
         //TODO: Replace with function to send current orders
-        await Clients.Caller.SendAsync("Connected", "Connected with session " + groupName);
+        var message = "Connected with session " + groupName;
+        await Clients.Caller.SendAsync("Connected", message);
     }
 
     public async Task SubmitOrder(NewOrderDto newOrderDto)
