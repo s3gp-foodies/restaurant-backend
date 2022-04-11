@@ -191,20 +191,18 @@ namespace foodies_app.Data.Migrations
                     b.Property<bool>("Completed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("OrderDate")
+                    b.Property<DateTime>("OrderTime")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SessionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("TableId")
+                    b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SessionId");
-
-                    b.HasIndex("TableId");
 
                     b.ToTable("Orders");
                 });
@@ -218,18 +216,23 @@ namespace foodies_app.Data.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("MenuItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("MenuItemId");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderItems");
                 });
@@ -403,26 +406,26 @@ namespace foodies_app.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("foodies_app.Entities.Table", "Table")
-                        .WithMany()
-                        .HasForeignKey("TableId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Session");
-
-                    b.Navigation("Table");
                 });
 
             modelBuilder.Entity("foodies_app.Entities.OrderItem", b =>
                 {
-                    b.HasOne("foodies_app.Entities.MenuItem", "Item")
+                    b.HasOne("foodies_app.Entities.MenuItem", "MenuItem")
                         .WithMany()
-                        .HasForeignKey("ItemId")
+                        .HasForeignKey("MenuItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Item");
+                    b.HasOne("foodies_app.Entities.Order", "Order")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MenuItem");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("foodies_app.Entities.Session", b =>
@@ -487,6 +490,11 @@ namespace foodies_app.Data.Migrations
             modelBuilder.Entity("foodies_app.Entities.MenuItem", b =>
                 {
                     b.Navigation("Allergy");
+                });
+
+            modelBuilder.Entity("foodies_app.Entities.Order", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("foodies_app.Entities.Session", b =>
