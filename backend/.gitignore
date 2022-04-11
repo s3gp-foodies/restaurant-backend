@@ -600,3 +600,6 @@ appsettings.json
 
 /food.db-shm
 /food.db-wal
+
+**/*.db
+**/.vs/*
