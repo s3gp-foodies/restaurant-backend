@@ -1,6 +1,7 @@
-﻿using foodies_app.Entities;
+using foodies_app.Entities;
 using foodies_app.Interfaces;
 using foodies_app.Interfaces.Repositories;
+using System.Collections.Generic;
 
 namespace foodies_app.Data.Repositories
 {
@@ -12,9 +13,9 @@ namespace foodies_app.Data.Repositories
         {
             _context= db;
         }
-        public Task<IEnumerable<Category>> GetCategories()
+        public List<Category> GetCategories()
         {
-            throw new NotImplementedException();
+           return _context.Categories.ToList();
         }
 
         public Category GetCategory(int id)
@@ -24,17 +25,20 @@ namespace foodies_app.Data.Repositories
 
         public void Add(Category item)
         {
-            throw new NotImplementedException();
+            _context.Categories.Add(item);
+            _context.SaveChanges();
         }
 
         public void Delete(Category item)
         {
-            throw new NotImplementedException();
+            _context.Categories.Remove(item);
+            _context.SaveChanges();
         }
 
         public void Edit(Category item)
         {
-            throw new NotImplementedException();
+            _context.Categories.Update(item);
+            _context.SaveChanges();
         }
     }
 }

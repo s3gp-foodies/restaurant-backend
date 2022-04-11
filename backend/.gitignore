@@ -603,3 +603,5 @@ appsettings.json
 
 **/*.db
 **/.vs/*
+
+/.vs/

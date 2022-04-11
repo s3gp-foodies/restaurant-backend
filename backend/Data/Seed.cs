@@ -1,6 +1,9 @@
 using System.Text.Json;
+using foodies_app.Data.Repositories;
 using foodies_app.DTOs;
 using foodies_app.Entities;
+using foodies_app.Interfaces;
+using foodies_app.Interfaces.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,8 +17,40 @@ public static class Seed
     {
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
-
+        var categoryRepository = scope.ServiceProvider.GetRequiredService<ICategoryRepository>();
+        var menuItemRepository = scope.ServiceProvider.GetRequiredService<IMenuItemRepository>();
         await SeedUsers(userManager, roleManager);
+        await SeedCategories(categoryRepository);
+        await SeedMenuItems(menuItemRepository);
+    }
+
+    private static async Task SeedCategories(ICategoryRepository categoryRepository)
+    {
+        var CategoryData = await File.ReadAllTextAsync("Data/SeedData/CategorySeedData.json");
+        var categories = JsonSerializer.Deserialize<List<CategoryDTO>>(CategoryData);
+
+        foreach (var Category in categories)
+        {
+            Category Cat = new Category(Category);
+            categoryRepository.Add(Cat);
+        }
+    }
+
+    private static async Task SeedMenuItems(IMenuItemRepository menuItemRepository)
+    {
+        var MenuItemData = await File.ReadAllTextAsync("Data/SeedData/MenuItemSeedData.json");
+        var MenuItems = JsonSerializer.Deserialize<List<CreateMenuItemDto>>(MenuItemData);
+
+        foreach (var menuItem in MenuItems)
+        {
+            MenuItem item = new MenuItem
+            {
+                Description = menuItem.Description,
+                Title = menuItem.Title,
+                Price = menuItem.Price
+            };
+            menuItemRepository.Add(item, menuItem.CategoryId);
+        }
     }
 
     private static async Task SeedUsers(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
@@ -24,9 +59,9 @@ public static class Seed
 
         var roles = new List<AppRole>
         {
-            new() {Name = "Staff"},
-            new() {Name = "Admin"},
-            new() {Name = "Table"},
+            new() { Name = "Staff" },
+            new() { Name = "Admin" },
+            new() { Name = "Table" },
         };
 
         foreach (var role in roles)
@@ -47,5 +82,4 @@ public static class Seed
             await userManager.AddToRoleAsync(appUser, user.Role);
         }
     }
-    
 }
