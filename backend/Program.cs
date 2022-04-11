@@ -1,9 +1,7 @@
 using foodies_app.Data;
-using foodies_app.Entities;
 using foodies_app.Extensions;
 using foodies_app.Middleware;
 using foodies_app.SignalR;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

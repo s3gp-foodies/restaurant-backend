@@ -16,20 +16,25 @@ public class OrderRepository : IOrderRepository
         _mapper = mapper;
     }
 
-    public Task<Order?> GetSessionOrder(int sessionId)
+    public async Task<List<Order>> GetSessionOrders(Session session)
     {
-        return _context.Orders.Where(order => order.SessionId == sessionId)
-            .Include(o => o.Items)
-            .FirstOrDefaultAsync();
-    }
-    
-    public async Task<bool> ConfirmOrder(int orderId)
-    {
-        var order = await _context.Orders.Where(o => o.Id == orderId).FirstOrDefaultAsync();
-        if (order == null) throw new BadHttpRequestException("Order not found");
-        order.Status = Status.inprogress;
-        return (await _context.SaveChangesAsync()>0);
-
+        return await _context.Orders.Where(order => order.Session == session)
+            .Include(o => o.Items).ToListAsync();
     }
 
+    public async Task<Order?> GetOrderById(int id)
+    {
+        return await _context.Orders.FindAsync(id);
+    }
+
+    public void CreateOrder(Order order, Session session)
+    {
+        _context.Orders.Add(order);
+        session.Orders.Add(order);
+    }
+
+    public void UpdateOrder(Order order)
+    {
+        _context.Orders.Update(order);
+    }
 }

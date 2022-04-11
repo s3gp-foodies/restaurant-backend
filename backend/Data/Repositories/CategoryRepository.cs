@@ -1,7 +1,5 @@
 ﻿using foodies_app.Entities;
-using foodies_app.Interfaces;
 using foodies_app.Interfaces.Repositories;
-using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 

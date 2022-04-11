@@ -2,7 +2,6 @@ using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Extensions;
 using foodies_app.Interfaces.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 
@@ -25,7 +24,7 @@ public class TableHub : Hub
         if (Context.User == null) throw new HubException("No valid user found");
         var user = await _userManager.FindByNameAsync(Context.User.GetUsername());
 
-        var session = await _sessionRepository.GetSession(user) ?? await _sessionRepository.StartSession(user);
+        var session = await _sessionRepository.GetSessionByUserId(user.Id) ?? await _sessionRepository.StartSession(user);
         var groupName = GetGroupName(user, session);
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 

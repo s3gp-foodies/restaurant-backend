@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using foodies_app.Entities;
-using foodies_app.Interfaces;
 using foodies_app.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +32,7 @@ namespace foodies_app.Data.Repositories
             _context.MenuItems.Update(item);
         }
 
-        public async Task<MenuItem> GetMenuItem(int id)
+        public async Task<MenuItem?> GetMenuItem(int id)
         {
             return await _context.MenuItems.Include("Category").FirstOrDefaultAsync(x => x.Id == id);
         }

@@ -26,7 +26,6 @@ public class SessionRepository : ISessionRepository
         _context.Sessions.Add(session);
         await _context.SaveChangesAsync();
         return session;
-        
     }
 
     public async void EndSession(Session session)
@@ -36,8 +35,8 @@ public class SessionRepository : ISessionRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Session?> GetSession(AppUser user)
+    public async Task<Session?> GetSessionByUserId(int userId)
     {
-        return await _context.Sessions.Where(s => s.User == user).FirstOrDefaultAsync();
+        return await _context.Sessions.Where(s => s.User.Id == userId).FirstOrDefaultAsync();
     }
 }

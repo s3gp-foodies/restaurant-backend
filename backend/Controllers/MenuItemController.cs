@@ -1,12 +1,14 @@
 ﻿using API.Interfaces;
 using foodies_app.DTOs;
 using foodies_app.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace foodies_app.Controllers
 {
+    [Authorize]
     public class MenuItemController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -23,7 +25,7 @@ namespace foodies_app.Controllers
             return await _unitOfWork.MenuRepository.GetMenuItems();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<MenuItem>> GetItem(int id)
         {
             var item = await _unitOfWork.MenuRepository.GetMenuItem(id);
@@ -48,7 +50,7 @@ namespace foodies_app.Controllers
             return await _unitOfWork.Complete() ? Ok() : BadRequest("Something went wrong when saving");
         }
 
-        [HttpPut("update/}")]
+        [HttpPut("update/")]
         public async Task<ActionResult> UpdateItem([FromBody] MenuItemUpdateDto updatedItem)
         {
             var menuItem = await _unitOfWork.MenuRepository.GetMenuItem(updatedItem.Id);
@@ -69,7 +71,7 @@ namespace foodies_app.Controllers
             return await _unitOfWork.Complete() ? Ok() : BadRequest("Something went wrong when saving");
         }
 
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("delete/{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
             var item = await _unitOfWork.MenuRepository.GetMenuItem(id);

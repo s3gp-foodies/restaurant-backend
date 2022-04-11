@@ -1,11 +1,7 @@
 using System.Text.Json;
-using API.Data;
 using API.Interfaces;
-using foodies_app.Data.Repositories;
 using foodies_app.DTOs;
 using foodies_app.Entities;
-using foodies_app.Interfaces;
-using foodies_app.Interfaces.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
