@@ -46,9 +46,9 @@ namespace foodies_app.Data.Repositories
             return await _context.MenuItems.Include("Category").FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public List<MenuItem> GetMenuItems()
+        public async Task<List<MenuItem>> GetMenuItems()
         {
-            return _context.MenuItems.ToList();
+            return await _context.MenuItems.ToListAsync();
         }
     }
 }

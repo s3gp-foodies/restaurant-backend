@@ -10,9 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace foodies_app.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MenuItemController : ControllerBase
+    public class MenuItemController : BaseApiController
     {
         private readonly IMenuItemRepository _menuItemRepository;
 
@@ -21,14 +19,12 @@ namespace foodies_app.Controllers
             _menuItemRepository = menuItemRepository;
         }
 
-        // GET: api/<MenuItemController>
         [HttpGet]
-        public List<MenuItem> GetAll()
+        public async Task<ActionResult<List<MenuItem>>> GetAll()
         {
-            return  _menuItemRepository.GetMenuItems();
+            return  await _menuItemRepository.GetMenuItems();
         }
 
-        // GET api/<MenuItemController>/5
         [HttpGet("{id}")]
         public async Task<MenuItem> Get(int id)
         {

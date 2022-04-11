@@ -7,7 +7,7 @@ namespace foodies_app.Interfaces.Repositories;
 
     public interface IMenuItemRepository
     {
-        List<MenuItem> GetMenuItems();
+        Task<List<MenuItem>> GetMenuItems();
         Task<MenuItem?> GetMenuItem(int id);
         void Add(MenuItem item, int menuItemCategoryId);
         void Delete(MenuItem item);
