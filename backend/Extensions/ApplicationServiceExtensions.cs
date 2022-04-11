@@ -1,3 +1,5 @@
+using API.Data;
+using API.Interfaces;
 using foodies_app.Data;
 using foodies_app.Data.Repositories;
 using foodies_app.Helpers;
@@ -19,9 +21,10 @@ public static class ApplicationServiceExtensions
         services.AddAutoMapper(typeof(AutomapperProfiles).Assembly);
 
         //AddScoped means that the service exists for the duration of the HTTP request
-        services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IMenuRepository, MenuRepository>();
         services.AddScoped<ITokenService, TokenService>();
-        services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+        services.AddScoped<IMenuRepository, MenuRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<ISessionRepository, SessionRepository>();
 

@@ -9,6 +9,6 @@ public class AutomapperProfiles : Profile
     public AutomapperProfiles()
     {
         CreateMap<AppUser, UserDto>();
-        CreateMap<OrderItem, GetOrderItemDto>();
+        CreateMap<OrderItem, OrderItemDto>();
     }
 }

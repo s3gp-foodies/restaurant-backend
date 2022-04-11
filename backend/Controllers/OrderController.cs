@@ -20,11 +20,11 @@ public class OrderController : BaseApiController
     }
                         
     [HttpGet("{sessionId}")]
-    public async Task<ActionResult<List<GetOrderItemDto>>> GetSessionOrder(int sessionId)
+    public async Task<ActionResult<List<OrderItemDto>>> GetSessionOrder(int sessionId)
     {
         var order = await _orderRepository.GetSessionOrder(sessionId);
         if (order == null) return BadRequest("No orders found for session");
-        return _mapper.Map<List<OrderItem>, List<GetOrderItemDto>>(order.Items);
+        return _mapper.Map<List<OrderItem>, List<OrderItemDto>>(order.Items);
     }
     
     [HttpPut("confirm/{orderId}")]

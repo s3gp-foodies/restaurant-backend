@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using API.Interfaces;
 using foodies_app.DTOs;
 using foodies_app.Entities;
-using foodies_app.Interfaces;
-using foodies_app.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,66 +9,75 @@ namespace foodies_app.Controllers
 {
     public class MenuItemController : BaseApiController
     {
-        private readonly IMenuItemRepository _menuItemRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public MenuItemController(IMenuItemRepository menuItemRepository)
+        public MenuItemController(IUnitOfWork unitOfWork)
         {
-            _menuItemRepository = menuItemRepository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MenuItem>>> GetAll()
+        public async Task<ActionResult<List<MenuItem>>> GetMenu()
         {
-            return  await _menuItemRepository.GetMenuItems();
+            //TODO: Create DTO for transferring Menu
+            return await _unitOfWork.MenuRepository.GetMenuItems();
         }
 
         [HttpGet("{id}")]
-        public async Task<MenuItem> Get(int id)
+        public async Task<ActionResult<MenuItem>> GetItem(int id)
         {
-            return await _menuItemRepository.GetMenuItem(id);
+            var item = await _unitOfWork.MenuRepository.GetMenuItem(id);
+            if (item == null) return NotFound("Item not found");
+            return item;
         }
 
-        // POST api/<MenuItemController>
-        [HttpPost]
-        public void Post([FromBody] CreateMenuItemDto menuItemDto)
+        [HttpPost("new")]
+        public async Task<ActionResult> NewItem([FromBody] MenuItemNewDto dto)
         {
-            // if (value.Description != null)
-            // {
-            MenuItem item = new MenuItem
+            var category = await _unitOfWork.CategoryRepository.GetCategory(dto.CategoryId);
+            if (category == null) return NotFound("The category does not exist");
+            var item = new MenuItem
             {
-                Description = menuItemDto.Description,
-                Title = menuItemDto.Title,
-                Price = menuItemDto.Price
-                
+                Description = dto.Description,
+                Title = dto.Title,
+                Price = dto.Price,
+                Category = category
             };
-            
-            _menuItemRepository.Add(item, menuItemDto.CategoryId);
-            //}
+
+            _unitOfWork.MenuRepository.AddMenuItem(item);
+            return await _unitOfWork.Complete() ? Ok() : BadRequest("Something went wrong when saving");
         }
 
-        // PUT api/<MenuItemController>/5
-        [HttpPut("{id}")]
-        public async void Put(int id, [FromBody] MenuItem menuitem)
+        [HttpPut("update/}")]
+        public async Task<ActionResult> UpdateItem([FromBody] MenuItemUpdateDto updatedItem)
         {
-            var item = await _menuItemRepository.GetMenuItem(id);
-            if (item.Description != null)
+            var menuItem = await _unitOfWork.MenuRepository.GetMenuItem(updatedItem.Id);
+            if (menuItem == null) return NotFound("Cannot update an item that doesn't exist.");
+
+            menuItem.Title = updatedItem.Title;
+            menuItem.Price = updatedItem.Price;
+            menuItem.Description = updatedItem.Description;
+
+            if (menuItem.Category.Id != updatedItem.categoryId)
             {
-                // _menuItemRepository.Add(menuitem);
-                throw new NotImplementedException();
+                var category = await _unitOfWork.CategoryRepository.GetCategory(updatedItem.categoryId);
+                if (category == null) return NotFound("The category does not exist");
+                menuItem.Category = category;
             }
+
+            _unitOfWork.MenuRepository.UpdateMenuItem(menuItem);
+            return await _unitOfWork.Complete() ? Ok() : BadRequest("Something went wrong when saving");
         }
 
-        // DELETE api/<MenuItemController>/5
-        [HttpDelete("{id}")]
-        public async void Delete(int id)
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult> Delete(int id)
         {
-            var item = await _menuItemRepository.GetMenuItem(id);
-            if (item != null)
-            {
-                _menuItemRepository.Delete(item);
-            }
-            //else send not succeeded or item not found respond
-            
+            var item = await _unitOfWork.MenuRepository.GetMenuItem(id);
+            if (item == null) return NotFound("Item not found");
+
+            _unitOfWork.MenuRepository.DeleteMenuItem(item);
+            return await _unitOfWork.Complete() ? Ok() : BadRequest("Something went wrong when saving");
+
         }
     }
 }

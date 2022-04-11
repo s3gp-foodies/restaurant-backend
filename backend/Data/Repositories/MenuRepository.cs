@@ -1,43 +1,39 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using foodies_app.Entities;
 using foodies_app.Interfaces;
+using foodies_app.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data.Repositories
 {
-    public class MenuItemRepository : IMenuItemRepository
+    public class MenuRepository : IMenuRepository
 
     {
         private readonly DataContext _context;
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
 
-        public MenuItemRepository(DataContext db , ICategoryRepository categoryRepository)
+        public MenuRepository(DataContext db, IMapper mapper)
         {
             _context= db;
-            _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
-        public void Add(MenuItem item, int menuItemCategoryId)
+        public void AddMenuItem(MenuItem item)
         {
-            // fix needed how to fill in category
-            item.Category = _categoryRepository.GetCategory(menuItemCategoryId);
             _context.MenuItems.Add(item);
-            _context.SaveChanges();
         }
 
-        public void Delete(MenuItem item)
+        public void DeleteMenuItem(MenuItem item)
         { 
-            // MenuItem menuItem =_context.MenuItems.Find(item);
-            // _context.MenuItems.Remove(menuItem);
-            // _context.SaveChanges();
+            _context.MenuItems.Remove(item);
         }
 
-        public void Edit(MenuItem item)
+        public void UpdateMenuItem(MenuItem item)
         {
             _context.MenuItems.Update(item);
-            _context.SaveChanges();
         }
 
         public async Task<MenuItem> GetMenuItem(int id)

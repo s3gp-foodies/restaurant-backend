@@ -1,7 +1,9 @@
-using foodies_app.Entities;
+﻿using foodies_app.Entities;
 using foodies_app.Interfaces;
 using foodies_app.Interfaces.Repositories;
 using System.Collections.Generic;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data.Repositories
 {
@@ -9,7 +11,7 @@ namespace foodies_app.Data.Repositories
     {
         private readonly DataContext _context;
 
-        public CategoryRepository(DataContext db)
+        public CategoryRepository(DataContext db, IMapper mapper)
         {
             _context= db;
         }
@@ -18,9 +20,9 @@ namespace foodies_app.Data.Repositories
            return _context.Categories.ToList();
         }
 
-        public Category GetCategory(int id)
+        public async Task<Category?> GetCategory(int id)
         {
-           return _context.Categories.FirstOrDefault(x => x.Id == id);
+           return await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public void Add(Category item)

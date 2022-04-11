@@ -1,4 +1,5 @@
-﻿using foodies_app.Entities;
+﻿using AutoMapper;
+using foodies_app.Entities;
 using foodies_app.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +8,12 @@ namespace foodies_app.Data.Repositories;
 public class OrderRepository : IOrderRepository
 {
     private readonly DataContext _context;
+    private readonly IMapper _mapper;
 
-    public OrderRepository(DataContext context)
+    public OrderRepository(DataContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public Task<Order?> GetSessionOrder(int sessionId)

@@ -1,6 +1,6 @@
 ﻿namespace foodies_app.DTOs
 {
-    public class CreateMenuItemDto
+    public class MenuItemNewDto
     {
         public string Title { get; set; }
         public string Description { get; set; }
