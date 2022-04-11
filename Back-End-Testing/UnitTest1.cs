@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace backend_test;
+namespace Back_End_Testing;
 
 public class Tests
 {

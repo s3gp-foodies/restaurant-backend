@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using foodies_app.Entities;
 using foodies_app.Interfaces;
-using foodies_app.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data.Repositories
@@ -48,7 +47,7 @@ namespace foodies_app.Data.Repositories
 
         public async Task<List<MenuItem>> GetMenuItems()
         {
-            return await _context.MenuItems.ToListAsync();
+            return await _context.MenuItems.Include("Category").ToListAsync();
         }
     }
 }
