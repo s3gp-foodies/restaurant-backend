@@ -1,0 +1,58 @@
+[
+  {
+    "Id": "1",
+    "OrderTime": "18:00",
+    "SessionId": "1",
+    "Status": "Complete",
+    "Completed": "1",
+    "Items": [
+      {
+        "Id": "1",
+        "Quantity": "2",
+        "Status": "Complete",
+        "MenuItem": "Caeser salad",
+        "ItemId": "1",
+        "Order": "1",
+        "OrderId": "1"
+      },
+      {
+        "Id": "2",
+        "Quantity": "2",
+        "Status": "Complete",
+        "MenuItem": "Classic burger",
+        "ItemId": "2",
+        "Order": "1",
+        "OrderId": "1"
+      }
+    ]
+  },
+
+  {
+    "Id": "2",
+    "OrderTime": "19:00",
+    "SessionId": "2",
+    "Status": "inprogress",
+    "Completed": "2",
+    "Items": [
+      {
+        "Id": "3",
+        "Quantity": "3",
+        "Status": "complete",
+        "MenuItem": "Oreo ice cream",
+        "ItemId": "3",
+        "Order": "2",
+        "OrderId": "2"
+      },
+      {
+        "Id": "4",
+        "Quantity": "3",
+        "Status": "inprogress",
+        "MenuItem": "Coca cola",
+        "ItemId": "4",
+        "Order": "2",
+        "OrderId": "2"
+      }
+    ]
+  }
+
+]

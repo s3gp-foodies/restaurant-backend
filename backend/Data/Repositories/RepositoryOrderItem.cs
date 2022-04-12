@@ -14,7 +14,7 @@ namespace foodies_app.Data.Repositories
             _context = db;
         }
        
-        public void Add(OrderItem item)
+        public void Add(OrderItem item, int itemId)
         {
             throw new NotImplementedException();
         }

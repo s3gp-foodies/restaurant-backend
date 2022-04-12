@@ -33,7 +33,7 @@ public class TableHub : Hub
         await Clients.Caller.SendAsync("Connected", "Connected with session " + groupName);
     }
 
-    public async Task SubmitOrder(NewOrderDto newOrderDto)
+    public async Task SubmitOrder(OrderDto newOrderDto)
     {
         
     }

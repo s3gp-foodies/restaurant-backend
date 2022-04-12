@@ -35,4 +35,10 @@ public class OrderRepository : IOrderRepository
         .Include(o => o.Items)
         .ToListAsync();
     }
+
+    public void Add(Order item, int Id)
+    {
+        _context.Orders.Add(item);
+        _context.SaveChanges();
+    }
 }

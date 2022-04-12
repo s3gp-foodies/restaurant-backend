@@ -37,4 +37,9 @@ public class SessionRepository : ISessionRepository
     {
         return await _context.Sessions.Where(s => s.User == user).FirstOrDefaultAsync();
     }
+
+    public Session? GetSession(int id)
+    {
+        return _context.Sessions.FirstOrDefault(x => x.Id == id);
+    }
 }

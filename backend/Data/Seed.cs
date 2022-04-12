@@ -19,9 +19,14 @@ public static class Seed
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
         var categoryRepository = scope.ServiceProvider.GetRequiredService<ICategoryRepository>();
         var menuItemRepository = scope.ServiceProvider.GetRequiredService<IMenuItemRepository>();
+        var orderItemRepository = scope.ServiceProvider.GetRequiredService<IOrderItemRepository>();
+        var orderRepository = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
         await SeedUsers(userManager, roleManager);
         await SeedCategories(categoryRepository);
         await SeedMenuItems(menuItemRepository);
+        await SeedOrderItems(orderItemRepository);
+        await SeedOrders(orderRepository);
+        
     }
 
     private static async Task SeedCategories(ICategoryRepository categoryRepository)
@@ -80,6 +85,39 @@ public static class Seed
             };
             await userManager.CreateAsync(appUser, "Passw0rd!");
             await userManager.AddToRoleAsync(appUser, user.Role);
+        }
+    }
+
+    private static async Task SeedOrderItems(IOrderItemRepository orderItemRepository)
+    {
+        var OrderItemData = await File.ReadAllTextAsync("Data/SeedData/OrderItemSeedData.json");
+        var OrderItems = JsonSerializer.Deserialize<List<OrderItemDto>>(OrderItemData);
+
+        foreach (var orderItem in OrderItems)
+        {
+            OrderItem item = new OrderItem
+            {
+                Quantity = orderItem.Quantity,
+                ItemId = orderItem.ItemId
+            };
+            orderItemRepository.Add(item, orderItem.Id);
+        }
+    }
+
+    private static async Task SeedOrders(IOrderRepository orderRepository)
+    {
+        var OrderData = await File.ReadAllTextAsync("Data/SeedData/OrderSeedData.json");
+        var Orders = JsonSerializer.Deserialize<List<OrderDto>>(OrderData);
+
+        foreach (var order in Orders)
+        {
+            Order item = new Order
+            {
+                OrderTime = order.OrderTime,
+                Status = order.Status,
+                Completed = order.Completed
+            };
+            orderRepository.Add(item, order.Id);
         }
     }
 }
