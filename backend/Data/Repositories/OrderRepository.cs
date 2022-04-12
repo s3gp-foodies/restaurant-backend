@@ -29,9 +29,9 @@ public class OrderRepository : IOrderRepository
 
     }
 
-    public Task<List<Order>> FetchOrders(int sessionId)
+    public async Task<List<Order>> FetchOrders(int sessionId)
     {
-        return _context.Orders.Where(order => order.SessionId == sessionId)
+        return await _context.Orders.Where(order => order.SessionId == sessionId)
         .Include(o => o.Items)
         .ToListAsync();
     }
