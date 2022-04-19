@@ -36,6 +36,31 @@ public class OrderController : BaseApiController
         
         return _mapper.Map<List<Order>, List<OrderDto>>(orders);
     }
+
+    //TODO: Fix this
+    [HttpPost("submit")]
+    public async Task<ActionResult> SubmitOrder(OrderSubmissionDto orderSubmission)
+    {  
+        var userId = User.GetUserId();
+        if (userId == null) return BadRequest();
+        
+        var session = await _unitOfWork.SessionRepository.GetSessionByUserId((int) userId);
+        if (session == null) return BadRequest("No session for this table");
+        
+        var items = (List<OrderItem>) orderSubmission.Items.Select(os => new OrderItem
+        {
+            ItemId = os.ItemId,
+            Quantity = os.Quantity
+        });
+        
+        var order = new Order
+        {
+            Items = items
+            };
+        
+        _unitOfWork.OrderRepository.CreateOrder(order, session);
+        return await _unitOfWork.Complete() ? Ok() : BadRequest("Something went wrong when saving");
+    }
     
     // [HttpPut("update/")]
     // public async Task<ActionResult> ConfirmOrder(int orderId)
