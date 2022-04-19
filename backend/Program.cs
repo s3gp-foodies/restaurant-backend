@@ -2,6 +2,7 @@ using foodies_app.Data;
 using foodies_app.Extensions;
 using foodies_app.Middleware;
 using foodies_app.SignalR;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +19,33 @@ builder.Services.AddSignalR();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+builder.Services.AddSwaggerGen(option =>
+{
+    option.SwaggerDoc("v1", new OpenApiInfo {Title = "Restaurant API", Version = "v1"});
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
 //Add services ABOVE this line
 var app = builder.Build();
 
@@ -61,6 +87,6 @@ app.UseAuthorization();
 
 //Add different endpoints
 app.MapControllers();
-app.MapHub<TableHub>("hubs/table"); 
+app.MapHub<TableHub>("hubs/table");
 
 app.Run();
