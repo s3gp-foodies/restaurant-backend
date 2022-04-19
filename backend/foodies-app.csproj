@@ -44,4 +44,10 @@
     <None Remove="food.db-shm" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="foodies-app, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>obj\Debug\net6.0\ref\foodies-app.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
