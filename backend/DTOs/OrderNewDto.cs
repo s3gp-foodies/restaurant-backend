@@ -1,5 +1,5 @@
 namespace foodies_app.DTOs;
 
-public class NewOrderDto
+public class OrderNewDto
 {
 }

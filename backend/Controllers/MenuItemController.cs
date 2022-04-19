@@ -1,6 +1,6 @@
-﻿using API.Interfaces;
-using foodies_app.DTOs;
+﻿using foodies_app.DTOs;
 using foodies_app.Entities;
+using foodies_app.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

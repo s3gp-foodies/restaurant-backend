@@ -1,10 +1,9 @@
-using API.Interfaces;
 using AutoMapper;
-using foodies_app.Data;
 using foodies_app.Data.Repositories;
+using foodies_app.Interfaces;
 using foodies_app.Interfaces.Repositories;
 
-namespace API.Data;
+namespace foodies_app.Data;
 
 public class UnitOfWork : IUnitOfWork
 {

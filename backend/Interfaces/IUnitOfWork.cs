@@ -1,6 +1,6 @@
 using foodies_app.Interfaces.Repositories;
 
-namespace API.Interfaces;
+namespace foodies_app.Interfaces;
 
 public interface IUnitOfWork
 {

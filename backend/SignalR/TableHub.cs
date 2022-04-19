@@ -33,7 +33,7 @@ public class TableHub : Hub
         await Clients.Caller.SendAsync("Connected", message);
     }
 
-    public async Task SubmitOrder(NewOrderDto newOrderDto)
+    public async Task SubmitOrder(OrderNewDto orderNewDto)
     {
         
     }
