@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace foodies_app.Controllers
 {
     [Authorize]
-    public class MenuItemController : BaseApiController
+    public class MenuController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public MenuItemController(IUnitOfWork unitOfWork)
+        public MenuController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
