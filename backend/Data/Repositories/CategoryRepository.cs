@@ -13,9 +13,9 @@ namespace foodies_app.Data.Repositories
         {
             _context= db;
         }
-        public List<Category> GetCategories()
+        public async Task<List<Category>> GetCategories()
         {
-           return _context.Categories.ToList();
+           return await _context.Categories.OrderBy(cat => cat.Id).ToListAsync();
         }
 
         public async Task<Category?> GetCategory(int id)

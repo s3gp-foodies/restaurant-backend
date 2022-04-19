@@ -24,6 +24,12 @@ namespace foodies_app.Controllers
             //TODO: Create DTO for transferring Menu
             return await _unitOfWork.MenuRepository.GetMenuItems();
         }
+        
+        [HttpGet("categories")]
+        public async Task<ActionResult<List<Category>>> GetCategories()
+        {
+            return await _unitOfWork.CategoryRepository.GetCategories();
+        }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<MenuItem>> GetItem(int id)
