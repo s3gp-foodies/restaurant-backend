@@ -593,3 +593,10 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/vuejs,rider,webstorm,visualstudio,visualstudiocode,dotnetcore
+
+appsettings.json
+**/.idea/
+.idea/
+**/*.db
+**/.vs/*
+/.vs/
