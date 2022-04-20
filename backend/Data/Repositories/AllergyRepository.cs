@@ -1,5 +1,5 @@
 ﻿using foodies_app.Entities;
-using foodies_app.Interfaces;
+using foodies_app.Interfaces.Repositories;
 
 namespace foodies_app.Data.Repositories
 {

@@ -55,7 +55,9 @@ public static class IdentityServiceExtensions
         //Use this to configure policies that can be used in API endpoints
         services.AddAuthorization(opt =>
         {
-            opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+            opt.AddPolicy("IsAdmin", policy => policy.RequireRole("Admin"));
+            opt.AddPolicy("IsTable", policy => policy.RequireRole("Table"));
+            opt.AddPolicy("IsStaff", policy => policy.RequireRole("Staff"));
         });
 
         return services;

@@ -2,10 +2,9 @@ using foodies_app.Data;
 using foodies_app.Data.Repositories;
 using foodies_app.Helpers;
 using foodies_app.Interfaces;
+using foodies_app.Interfaces.Repositories;
 using foodies_app.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace foodies_app.Extensions;
 
@@ -18,10 +17,11 @@ public static class ApplicationServiceExtensions
         services.AddAutoMapper(typeof(AutomapperProfiles).Assembly);
 
         //AddScoped means that the service exists for the duration of the HTTP request
-        services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ITokenService, TokenService>();
-        services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+        services.AddScoped<IMenuRepository, MenuRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<ISessionRepository, SessionRepository>();
 
         
         //Add the database context

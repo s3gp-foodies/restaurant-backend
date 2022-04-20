@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using foodies_app.Entities;
+﻿using foodies_app.Entities;
 
-namespace foodies_app.Interfaces
+namespace foodies_app.Interfaces.Repositories
 {
     public interface IOrderRepository
     {
-        Task<IEnumerable<Order>> GetOrders();
-        Task<Order> GetOrder(int id);
-        void Add(Order item);
-        void Delete(Order item);
-        void Edit(Order item);
+        Task<List<Order>> GetSessionOrders(Session session);
+        Task<Order?> GetOrderById(int id);
+        void CreateOrder(Order order, Session session);
+        void UpdateOrder(Order order);
+
     }
 }

@@ -1,5 +1,4 @@
 using System.Text.Json;
-using foodies_app.Data.Repositories;
 using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Interfaces;
@@ -14,41 +13,43 @@ public static class Seed
     //and creating a Seed* method that takes the relevant services as parameters.
     public static async Task Run(IServiceScope scope)
     {
+        var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
-        var categoryRepository = scope.ServiceProvider.GetRequiredService<ICategoryRepository>();
-        var menuItemRepository = scope.ServiceProvider.GetRequiredService<IMenuItemRepository>();
         await SeedUsers(userManager, roleManager);
-        await SeedCategories(categoryRepository);
-        await SeedMenuItems(menuItemRepository);
+        await SeedCategories(unitOfWork);
+        await SeedMenuItems(unitOfWork);
     }
 
-    private static async Task SeedCategories(ICategoryRepository categoryRepository)
+    private static async Task SeedCategories(IUnitOfWork unitOfWork)
     {
-        var CategoryData = await File.ReadAllTextAsync("Data/SeedData/CategorySeedData.json");
-        var categories = JsonSerializer.Deserialize<List<CategoryDTO>>(CategoryData);
+        var categoryData = await File.ReadAllTextAsync("Data/SeedData/CategorySeedData.json");
+        var categories = JsonSerializer.Deserialize<List<CategoryDto>>(categoryData);
 
-        foreach (var Category in categories)
+        foreach (var category in categories)
         {
-            Category Cat = new Category(Category);
-            categoryRepository.Add(Cat);
+            var cat = new Category(category);
+            unitOfWork.CategoryRepository.Add(cat);
         }
     }
 
-    private static async Task SeedMenuItems(IMenuItemRepository menuItemRepository)
+    private static async Task SeedMenuItems(IUnitOfWork unitOfWork)
     {
         var MenuItemData = await File.ReadAllTextAsync("Data/SeedData/MenuItemSeedData.json");
-        var MenuItems = JsonSerializer.Deserialize<List<CreateMenuItemDto>>(MenuItemData);
+        var MenuItems = JsonSerializer.Deserialize<List<MenuItemNewDto>>(MenuItemData);
 
         foreach (var menuItem in MenuItems)
         {
-            MenuItem item = new MenuItem
+            var category = await unitOfWork.CategoryRepository.GetCategory(menuItem.CategoryId);
+            var item = new MenuItem
             {
                 Description = menuItem.Description,
                 Title = menuItem.Title,
-                Price = menuItem.Price
+                Price = menuItem.Price,
+                Category = category
             };
-            menuItemRepository.Add(item, menuItem.CategoryId);
+
+            unitOfWork.MenuRepository.AddMenuItem(item);
         }
     }
 

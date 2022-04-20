@@ -18,12 +18,12 @@ namespace foodies_app.Entities
             
         }
 
-        public MenuItem(MenuItemsDTO menuItemsDto)
+        public MenuItem(MenuItemDTO menuItemDto)
         {
             
-            Title = menuItemsDto.Title;
-            Description = menuItemsDto.Description;
-            Price = menuItemsDto.Price;
+            Title = menuItemDto.Title;
+            Description = menuItemDto.Description;
+            Price = menuItemDto.Price;
             
         }
     }
