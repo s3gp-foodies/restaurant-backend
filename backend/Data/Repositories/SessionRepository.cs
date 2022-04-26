@@ -1,3 +1,4 @@
+using AutoMapper;
 using foodies_app.Entities;
 using foodies_app.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -7,10 +8,12 @@ namespace foodies_app.Data.Repositories;
 public class SessionRepository : ISessionRepository
 {
     private readonly DataContext _context;
+    private readonly IMapper _mapper;
 
-    public SessionRepository(DataContext context)
+    public SessionRepository(DataContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<Session> StartSession(AppUser user)
@@ -23,7 +26,6 @@ public class SessionRepository : ISessionRepository
         _context.Sessions.Add(session);
         await _context.SaveChangesAsync();
         return session;
-        
     }
 
     public async void EndSession(Session session)
@@ -33,9 +35,9 @@ public class SessionRepository : ISessionRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Session?> GetSession(AppUser user)
+    public async Task<Session?> GetSessionByUserId(int userId)
     {
-        return await _context.Sessions.Where(s => s.User == user).FirstOrDefaultAsync();
+        return await _context.Sessions.Where(s => s.User.Id == userId).FirstOrDefaultAsync();
     }
 
     public Session? GetSession(int id)

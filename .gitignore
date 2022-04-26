@@ -598,3 +598,5 @@ appsettings.json
 **/.idea/
 .idea/
 **/*.db
+**/.vs/*
+/.vs/

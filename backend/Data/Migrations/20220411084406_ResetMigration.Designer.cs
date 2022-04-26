@@ -8,11 +8,11 @@ using foodies_app.Data;
 
 #nullable disable
 
-namespace foodies_app.Migrations
+namespace foodies_app.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220328091720_UpdatedOrderAndOrderItem")]
-    partial class UpdatedOrderAndOrderItem
+    [Migration("20220411084406_ResetMigration")]
+    partial class ResetMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,6 @@
 ﻿namespace foodies_app.DTOs;
 
-public class CategoryDTO
+public class CategoryDto
 {
     public string Name { get; set; }
 }
