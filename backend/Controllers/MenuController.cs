@@ -49,6 +49,7 @@ namespace foodies_app.Controllers
                 Description = dto.Description,
                 Title = dto.Title,
                 Price = dto.Price,
+                ImageUrl = dto.ImageUrl,
                 Category = category
             };
 
@@ -65,6 +66,7 @@ namespace foodies_app.Controllers
             menuItem.Title = updatedItem.Title;
             menuItem.Price = updatedItem.Price;
             menuItem.Description = updatedItem.Description;
+            menuItem.ImageUrl = updatedItem.ImageUrl;
 
             if (menuItem.Category.Id != updatedItem.CategoryId)
             {

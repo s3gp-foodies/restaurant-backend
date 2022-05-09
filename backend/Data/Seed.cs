@@ -13,7 +13,7 @@ public static class Seed
     private static IUnitOfWork _unitOfWork;
     private static UserManager<AppUser> _userManager;
     private static RoleManager<AppRole> _roleManager;
-    private static Mapper _mapper;
+    private static IMapper _mapper;
 
     //Add new seeds by creating a seed data file Data/SeedData/*.json
     //and creating a Seed* method that takes the relevant services as parameters.
@@ -22,7 +22,7 @@ public static class Seed
         _unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
         _userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
         _roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
-        _mapper = scope.ServiceProvider.GetRequiredService<Mapper>();
+        _mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
         await SeedUsers();
         await SeedCategories();
         await SeedMenuItems();
@@ -56,6 +56,7 @@ public static class Seed
                     Description = menuItem.Description,
                     Title = menuItem.Title,
                     Price = menuItem.Price,
+                    ImageUrl = menuItem.ImageUrl,
                     Category = category
                 };
 
