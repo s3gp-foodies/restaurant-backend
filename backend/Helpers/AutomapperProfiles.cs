@@ -12,5 +12,7 @@ public class AutomapperProfiles : Profile
         CreateMap<OrderItem, OrderItemDto>();
 
         CreateMap<Order, OrderDto>();
+        CreateMap<Order, OrderSubmissionDto>();
+        CreateMap<OrderItem, OrderItemSubmissionDto>();
     }
 }

@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace foodies_app.Controllers
 {
     [Authorize]
-    public class MenuItemController : BaseApiController
+    public class MenuController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public MenuItemController(IUnitOfWork unitOfWork)
+        public MenuController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -23,6 +23,12 @@ namespace foodies_app.Controllers
         {
             //TODO: Create DTO for transferring Menu
             return await _unitOfWork.MenuRepository.GetMenuItems();
+        }
+        
+        [HttpGet("categories")]
+        public async Task<ActionResult<List<Category>>> GetCategories()
+        {
+            return await _unitOfWork.CategoryRepository.GetCategories();
         }
 
         [HttpGet("{id:int}")]

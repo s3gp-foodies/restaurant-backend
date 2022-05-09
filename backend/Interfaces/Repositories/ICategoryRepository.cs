@@ -4,7 +4,7 @@ namespace foodies_app.Interfaces.Repositories
 {
     public interface ICategoryRepository
     {
-         List<Category> GetCategories();
+        Task<List<Category>> GetCategories();
         Task<Category?> GetCategory(int id);
         void Add(Category item);
         void Delete(Category item);

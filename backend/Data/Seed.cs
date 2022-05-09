@@ -19,6 +19,7 @@ public static class Seed
         await SeedUsers(userManager, roleManager);
         await SeedCategories(unitOfWork);
         await SeedMenuItems(unitOfWork);
+        unitOfWork.Complete();
     }
 
     private static async Task SeedCategories(IUnitOfWork unitOfWork)
