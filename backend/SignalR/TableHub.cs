@@ -1,6 +1,7 @@
 using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Extensions;
+using foodies_app.Interfaces;
 using foodies_app.Interfaces.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
@@ -13,10 +14,13 @@ public class TableHub : Hub
     private readonly UserManager<AppUser> _userManager;
     private readonly ISessionRepository _sessionRepository;
 
+
+
     public TableHub(ISessionRepository sessionRepository, UserManager<AppUser> userManager)
     {
         _sessionRepository = sessionRepository;
         _userManager = userManager;
+
     }
 
     public override async Task OnConnectedAsync()
@@ -28,9 +32,13 @@ public class TableHub : Hub
         var groupName = GetGroupName(user, session);
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
-        //TODO: Replace with function to send current orders
-        var message = "Connected with session " + groupName;
-        await Clients.Caller.SendAsync("Connected", message);
+
+        var CurrentOrders = session.Orders.ToList();
+        foreach (var order in CurrentOrders)
+        {
+            var message = order;
+            await Clients.Caller.SendAsync("Connected", message.Id, message.Status, message.Items, message.OrderTime);
+        }
     }
 
     public async Task SubmitOrder(OrderNewDto orderNewDto)
