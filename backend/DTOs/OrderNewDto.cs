@@ -1,5 +1,3 @@
-using foodies_app.Entities;
-
 namespace foodies_app.DTOs;
 
 public class OrderNewDto

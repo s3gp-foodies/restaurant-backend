@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using foodies_app.Controllers;
 using foodies_app.Data;
 using foodies_app.Data.Repositories;
@@ -13,6 +14,7 @@ using NUnit.Framework;
 using Moq;
 using foodies_app.SignalR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app_test;
 
@@ -27,7 +29,7 @@ public class OrderTest
     }
 
     [Test]
-    public void Test()
+    public async Task Test()
     {
        
         var mock = new Mock<UnitOfWork>();
@@ -43,13 +45,13 @@ public class OrderTest
                 }
             }
         };
-      var user =  _userManager.GetUserAsync("admin");
-        _session.StartSession(user);
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == "table1");
+        await _session.StartSession(user);
         
-        _hub.SubmitOrder(neworder, );
-        
-        
-        
-        mock.Setup(work => work.OrderRepository.CreateOrder())
+        // _hub.SubmitOrder(neworder, );
+
+
+
+        // mock.Setup(work => work.OrderRepository.CreateOrder());
     }
 }
