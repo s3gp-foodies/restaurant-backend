@@ -41,11 +41,18 @@ public class TableHub : Hub
         }
     }
 
-    public async Task SubmitOrder(OrderNewDto orderNewDto)
+    public async Task SubmitOrder()
     {
-        
+        if (Context.User == null) throw new HubException("No valid user found");
+        var user = await _userManager.FindByNameAsync(Context.User.GetUsername());
+
+        var session = await _sessionRepository.GetSessionByUserId(user.Id) ?? await _sessionRepository.StartSession(user);
+        var CurrentOrders = session.Orders.ToList();
+        foreach (var order in CurrentOrders)
+        {
+            await Clients.Caller.SendAsync("Connected", order.Id, order.Status, order.Items, order.OrderTime);
+        }
     }
-    
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
