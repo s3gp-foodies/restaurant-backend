@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +18,10 @@ public class OrderRepository : IOrderRepository
         _mapper = mapper;
     }
 
-    public async Task<List<Order>> GetSessionOrders(Session session)
+    public async Task<List<OrderDto>> GetSessionOrders(Session session)
     {
         return await _context.Orders.Where(order => order.Session == session)
-            .Include(o => o.Items).ToListAsync();
+            .ProjectTo<OrderDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
     public async Task<Order?> GetOrderById(int id)

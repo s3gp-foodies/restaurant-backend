@@ -10,9 +10,11 @@ public class AutomapperProfiles : Profile
     {
         CreateMap<AppUser, UserDto>();
         CreateMap<OrderItem, OrderItemDto>();
-
+        CreateMap<OrderItem, OrderNewDto>();
+        
         CreateMap<Order, OrderDto>();
         CreateMap<Order, OrderSubmissionDto>();
+        CreateMap<Order, SubmitProductDto>().ReverseMap();
         CreateMap<OrderItem, OrderItemSubmissionDto>();
         
         CreateMap<MenuItem, MenuItemDto>();
