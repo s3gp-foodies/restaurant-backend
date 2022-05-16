@@ -19,9 +19,9 @@ namespace foodies_app.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MenuItem>>> GetMenu()
+        public async Task<ActionResult<List<MenuItemDto>>> GetMenu()
         {
-            //TODO: Create DTO for transferring Menu
+            
             return await _unitOfWork.MenuRepository.GetMenuItems();
         }
         
@@ -49,6 +49,7 @@ namespace foodies_app.Controllers
                 Description = dto.Description,
                 Title = dto.Title,
                 Price = dto.Price,
+                ImageUrl = dto.ImageUrl,
                 Category = category
             };
 
@@ -65,10 +66,11 @@ namespace foodies_app.Controllers
             menuItem.Title = updatedItem.Title;
             menuItem.Price = updatedItem.Price;
             menuItem.Description = updatedItem.Description;
+            menuItem.ImageUrl = updatedItem.ImageUrl;
 
-            if (menuItem.Category.Id != updatedItem.categoryId)
+            if (menuItem.Category.Id != updatedItem.CategoryId)
             {
-                var category = await _unitOfWork.CategoryRepository.GetCategory(updatedItem.categoryId);
+                var category = await _unitOfWork.CategoryRepository.GetCategory(updatedItem.CategoryId);
                 if (category == null) return NotFound("The category does not exist");
                 menuItem.Category = category;
             }

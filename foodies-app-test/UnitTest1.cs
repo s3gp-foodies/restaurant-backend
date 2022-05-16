@@ -25,7 +25,7 @@ public class MenuItemControllerTests
             Price = 10,
             Title = "Ceasar salade",
             Category = null,
-            Allergy = null,
+            Allergies = null,
         });
 
         var controller = new MenuController(mock.Object);

@@ -13,10 +13,10 @@ namespace foodies_app.Controllers;
 [Authorize]
 public class OrderController : BaseApiController
 {
-    private readonly Mapper _mapper;
+    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
-    public OrderController(Mapper mapper, IUnitOfWork unitOfWork)
+    public OrderController(IMapper mapper, IUnitOfWork unitOfWork)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;

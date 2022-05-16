@@ -1,4 +1,5 @@
 using System.Text.Json;
+using AutoMapper;
 using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Interfaces;
@@ -9,77 +10,88 @@ namespace foodies_app.Data;
 
 public static class Seed
 {
+    private static IUnitOfWork _unitOfWork;
+    private static UserManager<AppUser> _userManager;
+    private static RoleManager<AppRole> _roleManager;
+    private static IMapper _mapper;
+
     //Add new seeds by creating a seed data file Data/SeedData/*.json
     //and creating a Seed* method that takes the relevant services as parameters.
     public static async Task Run(IServiceScope scope)
     {
-        var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
-        await SeedUsers(userManager, roleManager);
-        await SeedCategories(unitOfWork);
-        await SeedMenuItems(unitOfWork);
+        _unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+        _userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+        _roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
+        _mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+        await SeedUsers();
+        await SeedCategories();
+        await SeedMenuItems();
+        await _unitOfWork.Complete();
     }
 
-    private static async Task SeedCategories(IUnitOfWork unitOfWork)
+    private static async Task SeedCategories()
     {
         var categoryData = await File.ReadAllTextAsync("Data/SeedData/CategorySeedData.json");
         var categories = JsonSerializer.Deserialize<List<CategoryDto>>(categoryData);
 
-        foreach (var category in categories)
-        {
-            var cat = new Category(category);
-            unitOfWork.CategoryRepository.Add(cat);
-        }
-    }
-
-    private static async Task SeedMenuItems(IUnitOfWork unitOfWork)
-    {
-        var MenuItemData = await File.ReadAllTextAsync("Data/SeedData/MenuItemSeedData.json");
-        var MenuItems = JsonSerializer.Deserialize<List<MenuItemNewDto>>(MenuItemData);
-
-        foreach (var menuItem in MenuItems)
-        {
-            var category = await unitOfWork.CategoryRepository.GetCategory(menuItem.CategoryId);
-            var item = new MenuItem
+        if (categories != null)
+            foreach (var category in categories)
             {
-                Description = menuItem.Description,
-                Title = menuItem.Title,
-                Price = menuItem.Price,
-                Category = category
-            };
-
-            unitOfWork.MenuRepository.AddMenuItem(item);
-        }
+                _unitOfWork.CategoryRepository.Add(_mapper.Map<Category>(category));
+            }
     }
 
-    private static async Task SeedUsers(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+    private static async Task SeedMenuItems()
     {
-        if (await userManager.Users.AnyAsync()) return;
+        var menuItemData = await File.ReadAllTextAsync("Data/SeedData/MenuItemSeedData.json");
+        if (menuItemData == null) throw new ArgumentNullException(nameof(menuItemData));
+        var menuItems = JsonSerializer.Deserialize<List<MenuItemNewDto>>(menuItemData);
+
+        if (menuItems != null)
+            foreach (var menuItem in menuItems)
+            {
+                var category = await _unitOfWork.CategoryRepository.GetCategory(menuItem.CategoryId);
+                var item = new MenuItem
+                {
+                    Description = menuItem.Description,
+                    Title = menuItem.Title,
+                    Price = menuItem.Price,
+                    ImageUrl = menuItem.ImageUrl,
+                    Category = category
+                };
+
+                _unitOfWork.MenuRepository.AddMenuItem(item);
+            }
+    }
+
+    private static async Task SeedUsers()
+    {
+        if (await _userManager.Users.AnyAsync()) return;
 
         var roles = new List<AppRole>
         {
-            new() { Name = "Staff" },
-            new() { Name = "Admin" },
-            new() { Name = "Table" },
+            new() {Name = "Staff"},
+            new() {Name = "Admin"},
+            new() {Name = "Table"},
         };
 
         foreach (var role in roles)
         {
-            await roleManager.CreateAsync(role);
+            await _roleManager.CreateAsync(role);
         }
 
         var userData = await File.ReadAllTextAsync("Data/SeedData/UserSeedData.json");
         var users = JsonSerializer.Deserialize<List<RegisterDto>>(userData);
 
-        foreach (var user in users)
-        {
-            var appUser = new AppUser
+        if (users != null)
+            foreach (var user in users)
             {
-                UserName = user.UserName.ToLower()
-            };
-            await userManager.CreateAsync(appUser, "Passw0rd!");
-            await userManager.AddToRoleAsync(appUser, user.Role);
-        }
+                var appUser = new AppUser
+                {
+                    UserName = user.UserName.ToLower()
+                };
+                await _userManager.CreateAsync(appUser, "Passw0rd!");
+                await _userManager.AddToRoleAsync(appUser, user.Role);
+            }
     }
 }

@@ -6,15 +6,5 @@ namespace foodies_app.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
-        public Category(CategoryDto dto)
-        {
-            Name = dto.Name;
-        }
-
-        public Category()
-        {
-            
-        }
     }
 }
