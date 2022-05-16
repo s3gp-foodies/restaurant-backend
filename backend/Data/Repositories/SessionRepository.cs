@@ -40,6 +40,11 @@ public class SessionRepository : ISessionRepository
         return await _context.Sessions.Where(s => s.User.Id == userId).FirstOrDefaultAsync();
     }
 
+    public Session? GetSession(int id)
+    {
+        return _context.Sessions.FirstOrDefault(x => x.Id == id);
+    }
+
     public async Task<List<Session>> GetAllSessions()
     {
         return await _context.Sessions.ToListAsync();

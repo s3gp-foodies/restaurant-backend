@@ -39,9 +39,13 @@ public class TableHub : Hub
         var groupName = GetGroupName(user, session);
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
-        //TODO: Replace with function to send current orders
-        var message = "Connected with session " + groupName;
-        await Clients.Caller.SendAsync("Connected", message);
+
+        var CurrentOrders = session.Orders.ToList();
+        foreach (var order in CurrentOrders)
+        {
+            var message = order;
+            await Clients.Caller.SendAsync("Connected", message.Id, message.Status, message.Items, message.OrderTime);
+        }
     }
 
     public async Task SubmitOrder(OrderNewDto orderNewDto)
