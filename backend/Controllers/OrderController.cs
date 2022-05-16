@@ -32,9 +32,7 @@ public class OrderController : BaseApiController
         var session = await _unitOfWork.SessionRepository.GetSessionByUserId((int) userId);
         if (session == null) return BadRequest("No session for this table");
         
-        var orders = await _unitOfWork.OrderRepository.GetSessionOrders(session);
-        
-        return _mapper.Map<List<Order>, List<OrderDto>>(orders);
+        return  await _unitOfWork.OrderRepository.GetSessionOrders(session);
     }
 
     //TODO: Fix this
