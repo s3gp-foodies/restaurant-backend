@@ -30,25 +30,30 @@ public class TableHub : Hub
         if (Context.User == null) throw new HubException("No valid user found");
         var user = await _userManager.FindByNameAsync(Context.User.GetUsername());
 
-        var session = await _unitOfWork.SessionRepository.GetSessionByUserId(user.Id) ??
-                      await _unitOfWork.SessionRepository.StartSession(user);
-        var groupName = GetGroupName(user, session);
-        await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-
-
-        var currentOrders = session.Orders.ToList();
-        foreach (var order in currentOrders)
+        if (await _userManager.IsInRoleAsync(user, "Table"))
         {
-            await Clients.Caller.SendAsync("Connected", order.Id, order.Status, order.Items, order.OrderTime);
+            var session = await _unitOfWork.SessionRepository.GetSessionByUserId(user.Id) ??
+                          await _unitOfWork.SessionRepository.StartSession(user);
+            var groupName = GetGroupName(user, session);
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+            var currentOrders = session.Orders.ToList();
+            
+            //TODO: Send already submitted orders
+        }
+
+        if (await _userManager.IsInRoleAsync(user, "Staff"))
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, "staff");
+            //TODO: Send orders for status screen
         }
     }
 
-    public async Task SubmitOrder(OrderNewDto orderNewDto)
+    public async Task SubmitOrder(ICollection<SubmitProductDto> newOrder)
     {
-        if (orderNewDto == null) throw new HubException("No order given");
+        if (newOrder == null) throw new HubException("No order given");
         var session = GetUserSession();
 
-        var order = _mapper.Map<Order>(orderNewDto);
+        var order = _mapper.Map<Order>(newOrder);
         order.Completed = false;
         order.Status = Status.submitted;
         order.Session = session;
@@ -56,8 +61,13 @@ public class TableHub : Hub
 
         _unitOfWork.OrderRepository.CreateOrder(order, session);
         await _unitOfWork.Complete();
+        await SendOrderToStaff(order);
     }
 
+    private async Task SendOrderToStaff(Order order)
+    {
+        await Clients.Group("staff").SendAsync("UpdateOrders", order);
+    }
     public async Task<List<OrderDto>> GetOrders()
     {
         var session = GetUserSession();
