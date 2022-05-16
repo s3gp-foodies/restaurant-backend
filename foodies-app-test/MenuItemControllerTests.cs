@@ -15,7 +15,7 @@ public class MenuItemControllerTests
     }
 
     [Test]
-    public void Test1()
+    public void GetItem_GetObject()
     {
         var mock = new Mock<IUnitOfWork>();
         mock.Setup(work => work.MenuRepository.GetMenuItem(1).Result).Returns(new MenuItem()

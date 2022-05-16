@@ -7,4 +7,6 @@ public interface ISessionRepository
     Task<Session> StartSession(AppUser user);
     void EndSession(Session session);
     Task<Session?> GetSessionByUserId(int userId);
+    Task<List<Session>> GetAllSessions();
+    List<Session> GetAllSessionsNonAsync();
 }
