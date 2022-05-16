@@ -35,8 +35,8 @@ public class OrderRepository : IOrderRepository
         session.Orders.Add(order);
     }
 
-    public async Task UpdateOrder(Order order)
+    public void UpdateOrder(Order order)
     {
-        return await _context.Orders.Update(order);
+        _context.Orders.Update(order);
     }
 }

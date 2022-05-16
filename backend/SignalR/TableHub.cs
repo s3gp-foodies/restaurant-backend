@@ -3,7 +3,6 @@ using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Extensions;
 using foodies_app.Interfaces;
-using foodies_app.Interfaces.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 
@@ -38,7 +37,7 @@ public class TableHub : Hub
             var groupName = GetGroupName(user, session);
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             var currentOrders = session.Orders.ToList();
-            
+
             //TODO: Send already submitted orders
         }
 
@@ -67,9 +66,10 @@ public class TableHub : Hub
 
     private async Task SendOrderToStaff(Order order)
     {
-       var submitOrder = _mapper.Map<SubmittedOrderDto>( order);
+        var submitOrder = _mapper.Map<SubmittedOrderDto>(order);
         await Clients.Group("staff").SendAsync("UpdateOrder", submitOrder);
     }
+
     public async Task<List<OrderDto>> GetOrders()
     {
         var session = GetUserSession();
@@ -79,12 +79,10 @@ public class TableHub : Hub
 
     public async Task RetrieveOrder()
     {
-        if (Context.User == null) throw new HubException("No valid user found");
-        var user = await _userManager.FindByNameAsync(Context.User.GetUsername());
+        var session = GetUserSession();
 
-        var session = await _unitOfWork.SessionRepository.GetSessionByUserId(user.Id) ?? await _sessionRepository.StartSession(user);
-        var CurrentOrders = session.Orders.ToList();
-        foreach (var order in CurrentOrders)
+        var currentOrders = session.Orders.ToList();
+        foreach (var order in currentOrders)
         {
             await Clients.Caller.SendAsync("Connected", order.Id, order.Status, order.Items, order.OrderTime);
         }
