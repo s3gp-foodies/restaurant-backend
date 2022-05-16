@@ -16,6 +16,7 @@ public class AutomapperProfiles : Profile
         CreateMap<Order, OrderSubmissionDto>();
         CreateMap<Order, SubmitProductDto>().ReverseMap();
         CreateMap<OrderItem, OrderItemSubmissionDto>();
+        CreateMap<Order, SubmittedOrderDto>().ReverseMap();
         
         CreateMap<MenuItem, MenuItemDto>();
         CreateMap<Allergy, AllergyDto>();
