@@ -36,12 +36,15 @@ public class TableHub : Hub
         var CurrentOrders = session.Orders.ToList();
         foreach (var order in CurrentOrders)
         {
-            var message = order;
-            await Clients.Caller.SendAsync("Connected", message.Id, message.Status, message.Items, message.OrderTime);
+            await Clients.Caller.SendAsync("Connected", order.Id, order.Status, order.Items, order.OrderTime);
         }
     }
+    public async Task SubmitOrder(OrderNewDto orderNewDto)
+    {
 
-    public async Task SubmitOrder()
+    }
+
+    public async Task RetrieveOrder()
     {
         if (Context.User == null) throw new HubException("No valid user found");
         var user = await _userManager.FindByNameAsync(Context.User.GetUsername());
