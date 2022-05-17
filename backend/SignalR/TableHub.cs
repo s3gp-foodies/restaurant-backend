@@ -34,12 +34,16 @@ public class TableHub : Hub
         {
             var session = await _unitOfWork.SessionRepository.GetSessionByUserId(user.Id) ??
                           await _unitOfWork.SessionRepository.StartSession(user);
+            await _unitOfWork.Complete();
             _sessions.Add(session);
             var groupName = GetGroupName(user, session);
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-            var currentOrders = session.Orders.ToList();
+            if (session.Orders != null)
+            {
+                var currentOrders = session.Orders.ToList();
 
-            //TODO: Send already submitted orders
+                //TODO: Send already submitted orders
+            }
         }
 
         if (await _userManager.IsInRoleAsync(user, "Staff"))
