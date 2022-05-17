@@ -58,21 +58,52 @@ public class TableHub : Hub
         if (newOrder == null) throw new HubException("No order given");
         var session = GetUserSession();
 
-        var order = _mapper.Map<Order>(newOrder);
-        order.Completed = false;
-        order.Status = Status.submitted;
-        order.Session = session;
-        order.OrderTime = DateTime.UtcNow;
+        var order = _mapper.Map<ICollection<Order>>(newOrder);
+        foreach (var item in order)
+        {
+            item.Completed = false;
+            item.Status = Status.submitted;
+            item.Session = session;
+            item.OrderTime = DateTime.UtcNow;
 
-        _unitOfWork.OrderRepository.CreateOrder(order, session);
+        _unitOfWork.OrderRepository.CreateOrder(item, session);
+        }
+
         await _unitOfWork.Complete();
-        await SendOrderToStaff(order);
+        await SendOrderToStaff(order, newOrder);
     }
 
-    private async Task SendOrderToStaff(Order order)
+    private async Task SendOrderToStaff(ICollection<Order> order,ICollection<SubmitProductDto> products)
     {
-        var submitOrder = _mapper.Map<SubmittedOrderDto>(order);
-        await Clients.Group("staff").SendAsync("UpdateOrder", submitOrder);
+       // var submitOrder = _mapper.Map<SubmittedOrderDto>(order);
+        List<SubmittedOrderDto> orderList = new List<SubmittedOrderDto>();
+        List<SubmittedProductDto> productList = new List<SubmittedProductDto>();  
+        foreach (var product in products)
+        {
+            MenuItem item = await _unitOfWork.MenuRepository.GetMenuItem(product.ProductId);
+           
+              SubmittedProductDto test =  new SubmittedProductDto()
+                {
+                    Name = item.Title,
+                    Amount = product.Count,
+                    Category = item.Category.ToString(),
+
+                };
+
+            productList.Add(test);
+        }
+        foreach (var item in order)
+        {
+            SubmittedOrderDto orderDto = new SubmittedOrderDto()
+            {
+                tableId = item.SessionId,
+                time = item.OrderTime,
+                products = productList
+
+            };
+            orderList.Add(orderDto); 
+        }
+        await Clients.Group("staff").SendAsync("UpdateOrder", orderList);
     }
 
     public async Task<List<OrderDto>> GetOrders()
