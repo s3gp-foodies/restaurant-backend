@@ -66,7 +66,7 @@ public class TableHub : Hub
 
     private async Task SendOrderToStaff(Order order)
     {
-        await Clients.Group("staff").SendAsync("UpdateOrders", order);
+        await Clients.Group("staff").SendAsync("UpdateOrder", order);
     }
     public async Task<List<OrderDto>> GetOrders()
     {
