@@ -71,6 +71,16 @@ public class TableHub : Hub
         await Clients.Group("staff").SendAsync("UpdateOrder", submitOrder);
     }
 
+    public async Task UpdateOrderAsStaff(Order order)
+    {
+        order.Session = GetUserSession();
+        order.Status = Status.inprogress;
+
+        _unitOfWork.OrderRepository.UpdateOrder(order);
+        await _unitOfWork.Complete();
+        await SendOrderToStaff(order);
+    }
+
     public async Task<List<OrderDto>> GetOrders()
     {
         var session = GetUserSession();
