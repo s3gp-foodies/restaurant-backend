@@ -34,10 +34,11 @@ public class TableHub : Hub
         {
             var session = await _unitOfWork.SessionRepository.GetSessionByUserId(user.Id) ??
                           await _unitOfWork.SessionRepository.StartSession(user);
+            _sessions.Add(session);
             var groupName = GetGroupName(user, session);
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             var currentOrders = session.Orders.ToList();
-            
+
             //TODO: Send already submitted orders
         }
 
@@ -66,9 +67,10 @@ public class TableHub : Hub
 
     private async Task SendOrderToStaff(Order order)
     {
-       var submitOrder = _mapper.Map<SubmittedOrderDto>( order);
+        var submitOrder = _mapper.Map<SubmittedOrderDto>(order);
         await Clients.Group("staff").SendAsync("UpdateOrder", submitOrder);
     }
+
     public async Task<List<OrderDto>> GetOrders()
     {
         var session = GetUserSession();
@@ -76,8 +78,18 @@ public class TableHub : Hub
         return await _unitOfWork.OrderRepository.GetSessionOrders(session);
     }
 
+    public async Task RetrieveOrder()
+    {
+        var session = GetUserSession();
 
-    public override async Task OnDisconnectedAsync(Exception exception)
+        var currentOrders = session.Orders.ToList();
+        foreach (var order in currentOrders)
+        {
+            await Clients.Caller.SendAsync("Connected", order.Id, order.Status, order.Items, order.OrderTime);
+        }
+    }
+
+    public override async Task OnDisconnectedAsync(Exception? exception)
     {
         await base.OnDisconnectedAsync(exception);
     }
