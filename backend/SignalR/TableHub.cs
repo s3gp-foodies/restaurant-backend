@@ -31,10 +31,9 @@ public class TableHub : Hub
         var session = await _sessionRepository.GetSessionByUserId(user.Id) ?? await _sessionRepository.StartSession(user);
         var groupName = GetGroupName(user, session);
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-
-
-        var CurrentOrders = session.Orders.ToList();
-        foreach (var order in CurrentOrders)
+        
+        var currentOrders = session.Orders.ToList();
+        foreach (var order in currentOrders)
         {
             var message = order;
             await Clients.Caller.SendAsync("Connected", message.Id, message.Status, message.Items, message.OrderTime);
