@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Interfaces.Repositories;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace foodies_app.Data.Repositories;
@@ -29,14 +30,41 @@ public class OrderRepository : IOrderRepository
         return await _context.Orders.FindAsync(id);
     }
 
-    public void CreateOrder(Order order, Session session)
+    public Order CreateOrder(Session session, IEnumerable<OrderItem> orderItems)
     {
-        _context.Orders.Add(order);
-        session.Orders.Add(order);
+        var order = _context.Orders.Add(new Order
+        {
+            OrderTime = DateTime.UtcNow,
+            Completed = false,
+            Session = session,
+            Status = Status.submitted,
+            Items = new List<OrderItem>()
+        });
+        order.Entity.Items.AddRange(orderItems);
+        session.Orders.Add(order.Entity);
+        
+        return order.Entity;
     }
 
     public void UpdateOrder(Order order)
     {
         _context.Orders.Update(order);
     }
+
+    // private void CreateOrderItems(Order order, ICollection<SubmitProductDto> newOrder)
+    // {
+    //     foreach (var newOrderItem in newOrder)
+    //     {
+    //         var menuItem = _context.MenuItems.Find(newOrderItem.ProductId);
+    //         if (menuItem == null) throw new HubException("Invalid product");
+    //         var orderitem = new OrderItem()
+    //         {
+    //             Quantity = newOrderItem.Count,
+    //             Status = Status.submitted,
+    //             MenuItem = menuItem,
+    //             MenuItemId = menuItem.Id
+    //         };
+    //         order.Items.Add(orderitem);
+    //     }
+    // }
 }

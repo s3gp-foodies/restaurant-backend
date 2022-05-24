@@ -10,7 +10,7 @@ namespace foodies_app.Entities
         public Status Status { get; set; }
 
         public MenuItem MenuItem { get; set; }
-        public int ItemId { get; set; }
+        public int MenuItemId { get; set; }
 
         public Order Order { get; set; }
         public int OrderId { get; set; }

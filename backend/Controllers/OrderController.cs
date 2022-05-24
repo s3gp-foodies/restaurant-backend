@@ -47,7 +47,7 @@ public class OrderController : BaseApiController
         
         var items = (List<OrderItem>) orderSubmission.Items.Select(os => new OrderItem
         {
-            ItemId = os.ItemId,
+            MenuItemId = os.ItemId,
             Quantity = os.Quantity
         });
         
@@ -56,7 +56,7 @@ public class OrderController : BaseApiController
             Items = items
             };
         
-        _unitOfWork.OrderRepository.CreateOrder(order, session);
+      //  _unitOfWork.OrderRepository.CreateOrder(order, session);
         return await _unitOfWork.Complete() ? Ok() : BadRequest("Something went wrong when saving");
     }
     

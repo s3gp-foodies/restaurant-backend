@@ -36,7 +36,7 @@ public class TableHub : Hub
                           await _unitOfWork.SessionRepository.StartSession(user);
             await _unitOfWork.Complete();
             _sessions.Add(session);
-            var groupName = GetGroupName(user, session);
+            var groupName = GetGroupName(user.UserName, session);
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             if (session.Orders != null)
             {
@@ -55,55 +55,53 @@ public class TableHub : Hub
 
     public async Task SubmitOrder(ICollection<SubmitProductDto> newOrder)
     {
-        if (newOrder == null) throw new HubException("No order given");
+        if (newOrder == null || newOrder.Count == 0) throw new HubException("No order given");
         var session = GetUserSession();
-
-        var order = _mapper.Map<ICollection<Order>>(newOrder);
-        foreach (var item in order)
+        var orderItems = new List<OrderItem>();
+        foreach (var product in newOrder)
         {
-            item.Completed = false;
-            item.Status = Status.submitted;
-            item.Session = session;
-            item.OrderTime = DateTime.UtcNow;
-
-        _unitOfWork.OrderRepository.CreateOrder(item, session);
+            orderItems.Add(new OrderItem
+            {
+                MenuItem = await _unitOfWork.MenuRepository.GetMenuItem(product.ProductId),
+                Status = Status.submitted,
+                Quantity = product.Count
+            });
         }
 
+      var order =  _unitOfWork.OrderRepository.CreateOrder(session, orderItems);
+
+
         await _unitOfWork.Complete();
-        await SendOrderToStaff(order, newOrder);
+         await SendOrderToStaff(order);
     }
 
-    private async Task SendOrderToStaff(ICollection<Order> order,ICollection<SubmitProductDto> products)
+    private async Task SendOrderToStaff(Order order)
     {
-       // var submitOrder = _mapper.Map<SubmittedOrderDto>(order);
-        List<SubmittedOrderDto> orderList = new List<SubmittedOrderDto>();
-        List<SubmittedProductDto> productList = new List<SubmittedProductDto>();  
-        foreach (var product in products)
+        // var submitOrder = _mapper.Map<SubmittedOrderDto>(order);
+        List<SubmittedProductDto> productList = new List<SubmittedProductDto>();
+        SubmittedOrderDto submittedOrderDto = new()
         {
-            MenuItem item = await _unitOfWork.MenuRepository.GetMenuItem(product.ProductId);
-           
-              SubmittedProductDto test =  new SubmittedProductDto()
-                {
-                    Name = item.Title,
-                    Amount = product.Count,
-                    Category = item.Category.ToString(),
-
-                };
+            tableId = order.SessionId,
+            time = order.OrderTime,
+            products = productList
+        };
+       
+        foreach (var orderItem in order.Items)
+        {
+            SubmittedProductDto test = new SubmittedProductDto()
+            {
+                Name = orderItem.MenuItem.Title,
+                Amount = orderItem.Quantity,
+                Category = orderItem.MenuItem.Category.ToString(),
+            };
 
             productList.Add(test);
         }
-        foreach (var item in order)
-        {
-            SubmittedOrderDto orderDto = new SubmittedOrderDto()
-            {
-                tableId = item.SessionId,
-                time = item.OrderTime,
-                products = productList
 
-            };
-            orderList.Add(orderDto); 
-        }
-        await Clients.Group("staff").SendAsync("UpdateOrder", orderList);
+        var session = GetUserSession();
+        var sessionbyid = await _unitOfWork.SessionRepository.GetSessionByUserId(session.UserId);
+        var groupname =   GetGroupName(sessionbyid.User.UserName, session);
+        await Clients.Group(groupname).SendAsync("UpdateOrder", submittedOrderDto);
     }
 
     public async Task<List<OrderDto>> GetOrders()
@@ -129,9 +127,9 @@ public class TableHub : Hub
         await base.OnDisconnectedAsync(exception);
     }
 
-    private string GetGroupName(AppUser user, Session session)
+    private string GetGroupName(string username, Session session)
     {
-        return user.UserName + "-" + session.Id;
+        return username + "-" + session.Id;
     }
 
     private Session GetUserSession()
@@ -140,4 +138,9 @@ public class TableHub : Hub
         if (session == null) throw new HubException("No session found");
         return session;
     }
+
+    // private async  string StatusOrdersFromdDatabase()
+    // {
+    //      
+    // }
 }
