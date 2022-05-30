@@ -99,8 +99,7 @@ public class TableHub : Hub
         }
 
         var session = GetUserSession();
-        var sessionbyid = await _unitOfWork.SessionRepository.GetSessionByUserId(session.UserId);
-        var groupname =   GetGroupName(sessionbyid.User.UserName, session);
+        var groupname =   GetGroupName(Context.User.GetUsername(), session);
         await Clients.Group(groupname).SendAsync("UpdateOrder", submittedOrderDto);
     }
 
