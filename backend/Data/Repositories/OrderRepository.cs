@@ -67,4 +67,17 @@ public class OrderRepository : IOrderRepository
     //         order.Items.Add(orderitem);
     //     }
     // }
+    
+    public async Task<List<Order>> GetAllOrders()
+    {
+       // List<OrderItem> orderitems = _context.OrderItems.ToList();
+        
+       List<Order>orders =   _context.Orders.ToList();
+       // foreach (var order in orders)
+       // {
+       //  order.Items.Add(orderitems.Find(x => x.OrderId == order.Id));
+       // }
+
+       return orders;
+    }
 }
