@@ -92,7 +92,7 @@ public class TableHub : Hub
             {
                 Name = orderItem.MenuItem.Title,
                 Amount = orderItem.Quantity,
-                Category = orderItem.MenuItem.Category.ToString(),
+                Category = orderItem.MenuItem.Category.Name,
             };
 
             productList.Add(test);
