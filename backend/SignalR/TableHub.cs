@@ -74,6 +74,11 @@ public class TableHub : Hub
         await _unitOfWork.Complete();
          await SendOrderToStaff(order);
     }
+    
+    public async Task getMessage()
+    {
+        await Clients.Caller.SendAsync("receiveMessage","This is a test");
+    }
 
     private async Task SendOrderToStaff(Order order)
     {
