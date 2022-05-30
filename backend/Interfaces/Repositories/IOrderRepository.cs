@@ -7,7 +7,7 @@ namespace foodies_app.Interfaces.Repositories
     {
         Task<List<OrderDto>> GetSessionOrders(Session session);
         Task<Order?> GetOrderById(int id);
-        void CreateOrder(Order order, Session session);
+        Order CreateOrder(Session session, IEnumerable<OrderItem> newOrder);
         void UpdateOrder(Order order);
 
     }
