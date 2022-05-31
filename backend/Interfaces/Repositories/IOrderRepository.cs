@@ -10,5 +10,6 @@ namespace foodies_app.Interfaces.Repositories
         Order CreateOrder(Session session, IEnumerable<OrderItem> newOrder);
         void UpdateOrder(Order order);
         Task<List<Order>> GetAllOrders();
+        Task<List<SubmittedOrderDto>> GetStaffOrders();
     }
 }

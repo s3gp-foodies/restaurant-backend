@@ -76,4 +76,10 @@ public class OrderController : BaseApiController
     {
         return await _unitOfWork.OrderRepository.GetAllOrders();
     }
+
+    [HttpGet("getAllStaffOrders")]
+    public async Task<List<SubmittedOrderDto>> GetAllStaffOrders()
+    {
+        return await _unitOfWork.OrderRepository.GetStaffOrders();
+    }
 }

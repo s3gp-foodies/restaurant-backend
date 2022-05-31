@@ -30,6 +30,10 @@ public class OrderRepository : IOrderRepository
         return await _context.Orders.FindAsync(id);
     }
 
+    public List<OrderItem> GetAllOrdersById(int id)
+    {
+        return _context.OrderItems.Where(x => x.OrderId == id).ToList();
+    }
     public Order CreateOrder(Session session, IEnumerable<OrderItem> orderItems)
     {
         var order = _context.Orders.Add(new Order
@@ -79,5 +83,37 @@ public class OrderRepository : IOrderRepository
        // }
 
        return orders;
+    }
+
+    public async Task<List<SubmittedOrderDto>> GetStaffOrders()
+    {
+        List<Order>orders =   _context.Orders.ToList();
+        List<SubmittedOrderDto> staffOrders = new List<SubmittedOrderDto>(); 
+        
+        foreach (var order in orders)
+        {
+            List<SubmittedProductDto> submittedProducts = new List<SubmittedProductDto>();
+            List<OrderItem> orderItems = GetAllOrdersById(order.Id);
+            
+            orderItems.ForEach(orderItem => { _context.MenuItems.Include("Category")
+                .FirstOrDefaultAsync(menuItem => menuItem.Id == orderItem.MenuItemId); });
+            
+            orderItems.ForEach(x => submittedProducts.Add(new SubmittedProductDto
+            {
+                Id = x.Id,
+                Name = x.MenuItem.Title,
+                Category = x.MenuItem.Category.Name,
+                Amount = x.Quantity
+            }));
+            
+            staffOrders.Add(new SubmittedOrderDto()
+            {
+                tableId = order.Id,
+                time = order.OrderTime,
+                products = submittedProducts
+            });
+        }
+
+        return staffOrders;
     }
 }
