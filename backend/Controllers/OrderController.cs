@@ -71,5 +71,9 @@ public class OrderController : BaseApiController
     //     return BadRequest("Something went wrong");
     //     
     // }
-
+    [HttpGet("getallorders")]
+    public async Task<List<Order>> GetAllOrders()
+    {
+        return await _unitOfWork.OrderRepository.GetAllOrders();
+    }
 }

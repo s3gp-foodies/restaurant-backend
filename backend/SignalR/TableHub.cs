@@ -58,6 +58,7 @@ public class TableHub : Hub
         if (newOrder == null || newOrder.Count == 0) throw new HubException("No order given");
         var session = GetUserSession();
         var orderItems = new List<OrderItem>();
+        
         foreach (var product in newOrder)
         {
             orderItems.Add(new OrderItem
@@ -69,15 +70,19 @@ public class TableHub : Hub
         }
 
       var order =  _unitOfWork.OrderRepository.CreateOrder(session, orderItems);
-
-
-        await _unitOfWork.Complete();
-         await SendOrderToStaff(order);
+      
+      await _unitOfWork.Complete();
+      await SendOrderToStaff(order);
     }
     
     public async Task getMessage()
     {
         await Clients.Caller.SendAsync("receiveMessage","This is a test");
+    }
+    
+    public async Task GetOrder(Order order)
+    {
+        await Clients.Caller.SendAsync("receiveOrder", order);
     }
 
     private async Task SendOrderToStaff(Order order)
@@ -95,6 +100,7 @@ public class TableHub : Hub
         {
             SubmittedProductDto test = new SubmittedProductDto()
             {
+                Id = orderItem.MenuItemId,
                 Name = orderItem.MenuItem.Title,
                 Amount = orderItem.Quantity,
                 Category = orderItem.MenuItem.Category.Name,
