@@ -41,7 +41,7 @@ public class OrderTest
                 new OrderItemDto{
                     Id = 1,
                     Quantity = 3,
-                    ItemId = 1
+                    MenuItemId = 1
                 }
             }
         };
