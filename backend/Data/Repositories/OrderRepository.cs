@@ -67,9 +67,16 @@ public class OrderRepository : IOrderRepository
 
     public async Task UpdateOrderItemStatus(int id, Status status)
     {
-        var order = await _context.OrderItems.Where(o => o.Id == id).FirstOrDefaultAsync();
-        if (order == null) throw new HubException("OrderItem doesn't exist");
-        order.Status = status;
+        var orderItem = await _context.OrderItems.Where(o => o.Id == id).FirstOrDefaultAsync();
+        if (orderItem == null) throw new HubException("OrderItem doesn't exist");
+        orderItem.Status = status;
+
+        var order = await _context.Orders.Include(o => o.Items).FirstOrDefaultAsync(o => o.Id == orderItem.OrderId);
+        if (order != null && order.Items.TrueForAll(i => i.Status == Status.complete))
+        {
+            order.Status = Status.complete;
+            order.Completed = true;
+        }
     }
     // private void CreateOrderItems(Order order, ICollection<SubmitProductDto> newOrder)
     // {
