@@ -58,6 +58,12 @@ public class TableHub : Hub
         await _unitOfWork.OrderRepository.UpdateOrderStatus(orderStatus.Id,orderStatus.Status);
         await _unitOfWork.Complete();
     }
+    
+    public async Task UpdateOrderItemStatus(OrderStatusDto orderStatus)
+    {
+        await _unitOfWork.OrderRepository.UpdateOrderItemStatus(orderStatus.Id,orderStatus.Status);
+        await _unitOfWork.Complete();
+    }
 
     public async Task SubmitOrder(ICollection<SubmitProductDto> newOrder)
     { 

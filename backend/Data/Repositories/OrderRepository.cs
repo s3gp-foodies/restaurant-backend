@@ -64,6 +64,13 @@ public class OrderRepository : IOrderRepository
         if (status == Status.complete) order.Completed = true;
     }
 
+
+    public async Task UpdateOrderItemStatus(int id, Status status)
+    {
+        var order = await _context.OrderItems.Where(o => o.Id == id).FirstOrDefaultAsync();
+        if (order == null) throw new HubException("OrderItem doesn't exist");
+        order.Status = status;
+    }
     // private void CreateOrderItems(Order order, ICollection<SubmitProductDto> newOrder)
     // {
     //     foreach (var newOrderItem in newOrder)
