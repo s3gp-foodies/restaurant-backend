@@ -5,6 +5,7 @@ using foodies_app.Extensions;
 using foodies_app.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using static System.Enum;
 
 namespace foodies_app.SignalR;
 
@@ -59,9 +60,10 @@ public class TableHub : Hub
         await _unitOfWork.Complete();
     }
     
-    public async Task UpdateOrderItemStatus(OrderStatusDto orderStatus)
+    public async Task UpdateOrderItemStatus(int id, string statusName)
     {
-        await _unitOfWork.OrderRepository.UpdateOrderItemStatus(orderStatus.Id,orderStatus.Status);
+        TryParse(statusName, out Status status);
+        await _unitOfWork.OrderRepository.UpdateOrderItemStatus(id,status);
         await _unitOfWork.Complete();
     }
 
