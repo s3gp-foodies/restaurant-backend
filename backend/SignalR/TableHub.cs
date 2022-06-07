@@ -111,8 +111,9 @@ public class TableHub : Hub
         }
 
         var session = GetUserSession();
-        var groupname =   GetGroupName(Context.User.GetUsername(), session);
-        await Clients.Group(groupname).SendAsync("UpdateOrder", submittedOrderDto);
+        // var groupname =   GetGroupName(Context.User.GetUsername(), session);
+        await Clients.Groups("staff").SendAsync("Updateorder", submittedOrderDto);
+        // await Clients.Group(groupname).SendAsync("UpdateOrder", submittedOrderDto);
     }
 
     public async Task<List<OrderDto>> GetOrders()
