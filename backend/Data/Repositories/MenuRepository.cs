@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +15,7 @@ namespace foodies_app.Data.Repositories
 
         public MenuRepository(DataContext db, IMapper mapper)
         {
-            _context= db;
+            _context = db;
             _mapper = mapper;
         }
 
@@ -23,7 +25,7 @@ namespace foodies_app.Data.Repositories
         }
 
         public void DeleteMenuItem(MenuItem item)
-        { 
+        {
             _context.MenuItems.Remove(item);
         }
 
@@ -32,14 +34,17 @@ namespace foodies_app.Data.Repositories
             _context.MenuItems.Update(item);
         }
 
-        public async Task<MenuItem?> GetMenuItem(int id)
+        public async Task<MenuItem> GetMenuItem(int id)
         {
-            return await _context.MenuItems.Include("Category").FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.MenuItems.Include("Category")
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<MenuItem>> GetMenuItems()
+        public async Task<List<MenuItemDto>> GetMenuItems()
         {
-            return await _context.MenuItems.Include("Category").ToListAsync();
+            return await _context.MenuItems
+                .ProjectTo<MenuItemDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
     }
 }

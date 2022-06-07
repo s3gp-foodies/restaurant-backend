@@ -1,6 +1,6 @@
 [
   {
-    "UserName": "David",
+    "UserName": "Admin",
     "Role": "Admin"
   },
   {
@@ -8,7 +8,23 @@
     "Role": "Table"
   },
   {
-    "UserName": "Bob",
+    "UserName": "Table2",
+    "Role": "Table"
+  },
+  {
+    "UserName": "Table3",
+    "Role": "Table"
+  },
+  {
+    "UserName": "Staff1",
+    "Role": "Staff"
+  },
+  {
+    "UserName": "Staff2",
+    "Role": "Staff"
+  },
+  {
+    "UserName": "Staff3",
     "Role": "Staff"
   }
 ]

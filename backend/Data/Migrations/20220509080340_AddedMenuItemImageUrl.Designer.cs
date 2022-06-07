@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using foodies_app.Data;
 
@@ -10,9 +11,10 @@ using foodies_app.Data;
 namespace foodies_app.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220509080340_AddedMenuItemImageUrl")]
+    partial class AddedMenuItemImageUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.3");
@@ -213,7 +215,10 @@ namespace foodies_app.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("MenuItemId")
+                    b.Property<int>("ItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MenuItemId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("OrderId")
@@ -361,7 +366,7 @@ namespace foodies_app.Data.Migrations
             modelBuilder.Entity("foodies_app.Entities.Allergy", b =>
                 {
                     b.HasOne("foodies_app.Entities.MenuItem", null)
-                        .WithMany("Allergies")
+                        .WithMany("Allergy")
                         .HasForeignKey("MenuItemId");
                 });
 
@@ -408,9 +413,7 @@ namespace foodies_app.Data.Migrations
                 {
                     b.HasOne("foodies_app.Entities.MenuItem", "MenuItem")
                         .WithMany()
-                        .HasForeignKey("MenuItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MenuItemId");
 
                     b.HasOne("foodies_app.Entities.Order", "Order")
                         .WithMany("Items")
@@ -484,7 +487,7 @@ namespace foodies_app.Data.Migrations
 
             modelBuilder.Entity("foodies_app.Entities.MenuItem", b =>
                 {
-                    b.Navigation("Allergies");
+                    b.Navigation("Allergy");
                 });
 
             modelBuilder.Entity("foodies_app.Entities.Order", b =>

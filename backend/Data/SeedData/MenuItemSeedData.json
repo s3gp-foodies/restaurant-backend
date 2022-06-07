@@ -3,24 +3,28 @@
     "Title": "Caeser salad",
     "Description": "salad made like how the greeks made it.",
     "Price": 10.50,
-    "CategoryId": 1
+    "CategoryId": 1,
+    "ImageUrl": "https://www.leukerecepten.nl/wp-content/uploads/2019/06/caesar-salade-1.jpg"
   },
   {
     "Title": "classic burger",
     "Description": "classic american style burger with cheese.",
     "Price": 14.50,
-    "CategoryId": 2
+    "CategoryId": 2,
+    "ImageUrl": "https://www.gardengourmet.nl/sites/default/files/recipes/aeead5804e79ff6fb98b2039619c5230_200828_MEDIAMONKS_GG_Spicytarian.jpg"
   },
   {
     "Title": "oreo ice cream",
     "Description": "delicious oreo ice cream topped with a cherry.",
     "Price": 5.95,
-    "CategoryId": 3
+    "CategoryId": 3,
+    "ImageUrl": "https://www.pavaniskitchen.com/wp-content/uploads/2021/04/oreo-ice-cream-1.jpg"
   },
   {
     "Title": "coca cola",
     "Description": "delicious cold coca cola.",
     "Price": 2.95,
-    "CategoryId": 4
+    "CategoryId": 4,
+    "ImageUrl": "https://previews.123rf.com/images/athtiat/athtiat1805/athtiat180500009/100870804-a-glass-of-coca-cola-with-ice-on-wood-plate.jpg"
   }
 ]

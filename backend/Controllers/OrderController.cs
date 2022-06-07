@@ -13,10 +13,10 @@ namespace foodies_app.Controllers;
 [Authorize]
 public class OrderController : BaseApiController
 {
-    private readonly Mapper _mapper;
+    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
-    public OrderController(Mapper mapper, IUnitOfWork unitOfWork)
+    public OrderController(IMapper mapper, IUnitOfWork unitOfWork)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;
@@ -32,9 +32,7 @@ public class OrderController : BaseApiController
         var session = await _unitOfWork.SessionRepository.GetSessionByUserId((int) userId);
         if (session == null) return BadRequest("No session for this table");
         
-        var orders = await _unitOfWork.OrderRepository.GetSessionOrders(session);
-        
-        return _mapper.Map<List<Order>, List<OrderDto>>(orders);
+        return  await _unitOfWork.OrderRepository.GetSessionOrders(session);
     }
 
     //TODO: Fix this
@@ -49,7 +47,7 @@ public class OrderController : BaseApiController
         
         var items = (List<OrderItem>) orderSubmission.Items.Select(os => new OrderItem
         {
-            ItemId = os.ItemId,
+            MenuItemId = os.ItemId,
             Quantity = os.Quantity
         });
         
@@ -58,7 +56,7 @@ public class OrderController : BaseApiController
             Items = items
             };
         
-        _unitOfWork.OrderRepository.CreateOrder(order, session);
+      //  _unitOfWork.OrderRepository.CreateOrder(order, session);
         return await _unitOfWork.Complete() ? Ok() : BadRequest("Something went wrong when saving");
     }
     
@@ -73,5 +71,9 @@ public class OrderController : BaseApiController
     //     return BadRequest("Something went wrong");
     //     
     // }
-
+    [HttpGet("getallorders")]
+    public async Task<List<Order>> GetAllOrders()
+    {
+        return await _unitOfWork.OrderRepository.GetAllOrders();
+    }
 }
