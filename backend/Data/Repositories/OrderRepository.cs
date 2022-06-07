@@ -34,6 +34,7 @@ public class OrderRepository : IOrderRepository
     {
         return _context.OrderItems.Where(x => x.OrderId == id).ToList();
     }
+
     public Order CreateOrder(Session session, IEnumerable<OrderItem> orderItems)
     {
         var order = _context.Orders.Add(new Order
@@ -46,13 +47,21 @@ public class OrderRepository : IOrderRepository
         });
         order.Entity.Items.AddRange(orderItems);
         session.Orders.Add(order.Entity);
-        
+
         return order.Entity;
     }
 
     public void UpdateOrder(Order order)
     {
         _context.Orders.Update(order);
+    }
+
+    public async Task UpdateOrderStatus(int id, Status status)
+    {
+        var order = await _context.Orders.Where(o => o.Id == id).FirstOrDefaultAsync();
+        if (order == null) throw new HubException("Order doesn't exist");
+        order.Status = status;
+        if (status == Status.complete) order.Completed = true;
     }
 
     // private void CreateOrderItems(Order order, ICollection<SubmitProductDto> newOrder)
@@ -71,33 +80,36 @@ public class OrderRepository : IOrderRepository
     //         order.Items.Add(orderitem);
     //     }
     // }
-    
+
     public async Task<List<Order>> GetAllOrders()
     {
-       // List<OrderItem> orderitems = _context.OrderItems.ToList();
-        
-       List<Order>orders =   _context.Orders.ToList();
-       // foreach (var order in orders)
-       // {
-       //  order.Items.Add(orderitems.Find(x => x.OrderId == order.Id));
-       // }
+        // List<OrderItem> orderitems = _context.OrderItems.ToList();
 
-       return orders;
+        List<Order> orders = _context.Orders.ToList();
+        // foreach (var order in orders)
+        // {
+        //  order.Items.Add(orderitems.Find(x => x.OrderId == order.Id));
+        // }
+
+        return orders;
     }
 
     public async Task<List<SubmittedOrderDto>> GetStaffOrders()
     {
-        List<Order>orders =   _context.Orders.Include(o => o.Session).Include(s => s.Session.User).ToList();
-        List<SubmittedOrderDto> staffOrders = new List<SubmittedOrderDto>(); 
-        
+        List<Order> orders = _context.Orders.Include(o => o.Session).Include(s => s.Session.User).ToList();
+        List<SubmittedOrderDto> staffOrders = new List<SubmittedOrderDto>();
+
         foreach (var order in orders)
         {
             List<SubmittedProductDto> submittedProducts = new List<SubmittedProductDto>();
             List<OrderItem> orderItems = GetAllOrdersById(order.Id);
-            
-            orderItems.ForEach(orderItem => { _context.MenuItems.Include("Category")
-                .FirstOrDefaultAsync(menuItem => menuItem.Id == orderItem.MenuItemId); });
-            
+
+            orderItems.ForEach(orderItem =>
+            {
+                _context.MenuItems.Include("Category")
+                    .FirstOrDefaultAsync(menuItem => menuItem.Id == orderItem.MenuItemId);
+            });
+
             orderItems.ForEach(x => submittedProducts.Add(new SubmittedProductDto
             {
                 Id = x.Id,

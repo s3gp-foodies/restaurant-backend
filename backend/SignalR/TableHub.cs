@@ -53,12 +53,18 @@ public class TableHub : Hub
         }
     }
 
-    public async Task SubmitOrder(ICollection<SubmitProductDto> newOrder)
+    public async Task UpdateOrderStatus(OrderStatusDto orderStatus)
     {
+        await _unitOfWork.OrderRepository.UpdateOrderStatus(orderStatus.Id,orderStatus.Status);
+        await _unitOfWork.Complete();
+    }
+
+    public async Task SubmitOrder(ICollection<SubmitProductDto> newOrder)
+    { 
         if (newOrder == null || newOrder.Count == 0) throw new HubException("No order given");
         var session = GetUserSession();
         var orderItems = new List<OrderItem>();
-        
+
         foreach (var product in newOrder)
         {
             orderItems.Add(new OrderItem
@@ -69,17 +75,17 @@ public class TableHub : Hub
             });
         }
 
-      var order =  _unitOfWork.OrderRepository.CreateOrder(session, orderItems);
-      
-      await _unitOfWork.Complete();
-      await SendOrderToStaff(order);
+        var order = _unitOfWork.OrderRepository.CreateOrder(session, orderItems);
+
+        await _unitOfWork.Complete();
+        await SendOrderToStaff(order);
     }
-    
+
     public async Task getMessage()
     {
-        await Clients.Caller.SendAsync("receiveMessage","This is a test");
+        await Clients.Caller.SendAsync("receiveMessage", "This is a test");
     }
-    
+
     public async Task GetOrder(Order order)
     {
         await Clients.Caller.SendAsync("receiveOrder", order);
@@ -96,7 +102,7 @@ public class TableHub : Hub
             time = order.OrderTime,
             products = productList
         };
-       
+
         foreach (var orderItem in order.Items)
         {
             SubmittedProductDto test = new SubmittedProductDto()
@@ -111,7 +117,7 @@ public class TableHub : Hub
         }
 
         var session = GetUserSession();
-        var groupname =   GetGroupName(Context.User.GetUsername(), session);
+        var groupname = GetGroupName(Context.User.GetUsername(), session);
         await Clients.Group(groupname).SendAsync("UpdateOrder", submittedOrderDto);
     }
 
