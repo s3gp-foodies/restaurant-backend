@@ -81,7 +81,6 @@ app.UseCors(policy => policy
     .AllowAnyHeader()
     .AllowCredentials());
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -5,6 +5,7 @@ using foodies_app.Extensions;
 using foodies_app.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using static System.Enum;
 
 namespace foodies_app.SignalR;
 
@@ -53,12 +54,25 @@ public class TableHub : Hub
         }
     }
 
-    public async Task SubmitOrder(ICollection<SubmitProductDto> newOrder)
+    public async Task UpdateOrderStatus(OrderStatusDto orderStatus)
     {
+        await _unitOfWork.OrderRepository.UpdateOrderStatus(orderStatus.Id,orderStatus.Status);
+        await _unitOfWork.Complete();
+    }
+    
+    public async Task UpdateOrderItemStatus(int id, string statusName)
+    {
+        TryParse(statusName, out Status status);
+        await _unitOfWork.OrderRepository.UpdateOrderItemStatus(id,status);
+        await _unitOfWork.Complete();
+    }
+
+    public async Task SubmitOrder(ICollection<SubmitProductDto> newOrder)
+    { 
         if (newOrder == null || newOrder.Count == 0) throw new HubException("No order given");
         var session = GetUserSession();
         var orderItems = new List<OrderItem>();
-        
+
         foreach (var product in newOrder)
         {
             orderItems.Add(new OrderItem
@@ -69,17 +83,17 @@ public class TableHub : Hub
             });
         }
 
-      var order =  _unitOfWork.OrderRepository.CreateOrder(session, orderItems);
-      
-      await _unitOfWork.Complete();
-      await SendOrderToStaff(order);
+        var order = _unitOfWork.OrderRepository.CreateOrder(session, orderItems);
+
+        await _unitOfWork.Complete();
+        await SendOrderToStaff(order);
     }
-    
+
     public async Task getMessage()
     {
-        await Clients.Caller.SendAsync("receiveMessage","This is a test");
+        await Clients.Caller.SendAsync("receiveMessage", "This is a test");
     }
-    
+
     public async Task GetOrder(Order order)
     {
         await Clients.Caller.SendAsync("receiveOrder", order);
@@ -88,6 +102,7 @@ public class TableHub : Hub
     private async Task SendOrderToStaff(Order order)
     {
         // var submitOrder = _mapper.Map<SubmittedOrderDto>(order);
+        //TODO: Fix the session id op tableID
         List<SubmittedProductDto> productList = new List<SubmittedProductDto>();
         SubmittedOrderDto submittedOrderDto = new()
         {
@@ -95,7 +110,7 @@ public class TableHub : Hub
             time = order.OrderTime,
             products = productList
         };
-       
+
         foreach (var orderItem in order.Items)
         {
             SubmittedProductDto test = new SubmittedProductDto()
