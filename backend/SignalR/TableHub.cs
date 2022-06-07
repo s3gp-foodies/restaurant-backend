@@ -88,6 +88,7 @@ public class TableHub : Hub
     private async Task SendOrderToStaff(Order order)
     {
         // var submitOrder = _mapper.Map<SubmittedOrderDto>(order);
+        //TODO: Fix the session id op tableID
         List<SubmittedProductDto> productList = new List<SubmittedProductDto>();
         SubmittedOrderDto submittedOrderDto = new()
         {

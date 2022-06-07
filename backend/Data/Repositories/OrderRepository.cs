@@ -87,7 +87,7 @@ public class OrderRepository : IOrderRepository
 
     public async Task<List<SubmittedOrderDto>> GetStaffOrders()
     {
-        List<Order>orders =   _context.Orders.ToList();
+        List<Order>orders =   _context.Orders.Include(o => o.Session).Include(s => s.Session.User).ToList();
         List<SubmittedOrderDto> staffOrders = new List<SubmittedOrderDto>(); 
         
         foreach (var order in orders)
@@ -105,10 +105,11 @@ public class OrderRepository : IOrderRepository
                 Category = x.MenuItem.Category.Name,
                 Amount = x.Quantity
             }));
-            
+
+            string userName = order.Session.User.UserName;
             staffOrders.Add(new SubmittedOrderDto()
             {
-                tableId = order.Id,
+                tableId = int.Parse(userName.Remove(0, 5)),
                 time = order.OrderTime,
                 products = submittedProducts
             });
