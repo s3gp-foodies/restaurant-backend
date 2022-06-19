@@ -143,4 +143,10 @@ public class OrderRepository : IOrderRepository
 
         return staffOrders;
     }
+    
+    public void ClearAllOrders()
+    {
+        System.Diagnostics.Debug.WriteLine("Orders:");
+        System.Diagnostics.Debug.WriteLine(_context.Orders);
+    }
 }

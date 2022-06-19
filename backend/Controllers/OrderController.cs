@@ -76,6 +76,12 @@ public class OrderController : BaseApiController
     {
         return await _unitOfWork.OrderRepository.GetAllOrders();
     }
+    
+    [HttpPost("clearAllOrders")]
+    public void ClearAllOrders()
+    {
+        _unitOfWork.OrderRepository.ClearAllOrders();
+    }
 
     [HttpGet("getAllStaffOrders")]
     public async Task<List<SubmittedOrderDto>> GetAllStaffOrders()
