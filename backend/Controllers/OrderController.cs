@@ -77,10 +77,13 @@ public class OrderController : BaseApiController
         return await _unitOfWork.OrderRepository.GetAllOrders();
     }
     
-    [HttpPost("clearAllOrders")]
-    public void ClearAllOrders()
+    [HttpPatch("end-session")]
+    public async Task<ActionResult> ClearAllOrders()
     {
-        _unitOfWork.OrderRepository.ClearAllOrders();
+        var userId = User.GetUserId();
+        if (userId == null) return BadRequest("No user found");
+        await _unitOfWork.OrderRepository.EndSession((int) userId);
+        return await _unitOfWork.Complete() ? Ok() : BadRequest("Something went wrong when saving");
     }
 
     [HttpGet("getAllStaffOrders")]

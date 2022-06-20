@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using foodies_app.DTOs;
 using foodies_app.Entities;
 using foodies_app.Interfaces.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +22,7 @@ public class OrderRepository : IOrderRepository
 
     public async Task<List<OrderDto>> GetSessionOrders(Session session)
     {
-        return await _context.Orders.Where(order => order.Session == session)
+        return await _context.Orders.Where(order => order.Session == session && order.Session.End  == DateTime.MinValue)
             .ProjectTo<OrderDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
@@ -143,10 +144,11 @@ public class OrderRepository : IOrderRepository
 
         return staffOrders;
     }
-    
-    public void ClearAllOrders()
+
+    public async Task EndSession(int userId)
     {
-        System.Diagnostics.Debug.WriteLine("Orders:");
-        System.Diagnostics.Debug.WriteLine(_context.Orders);
+        var session = await _context.Sessions.Where(s => s.UserId == userId && s.End == DateTime.MinValue).FirstOrDefaultAsync();
+        if (session == null) throw new Exception("No session found");
+        session.End = DateTime.UtcNow;
     }
 }

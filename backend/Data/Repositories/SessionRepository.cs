@@ -37,7 +37,7 @@ public class SessionRepository : ISessionRepository
 
     public async Task<Session?> GetSessionByUserId(int userId)
     {
-        return await _context.Sessions.Where(s => s.User.Id == userId).FirstOrDefaultAsync();
+        return await _context.Sessions.Where(s => s.User.Id == userId && s.End == DateTime.MinValue).FirstOrDefaultAsync();
     }
 
     public Session? GetSession(int id)

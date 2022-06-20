@@ -36,6 +36,10 @@ public class TableHub : Hub
             var session = await _unitOfWork.SessionRepository.GetSessionByUserId(user.Id) ??
                           await _unitOfWork.SessionRepository.StartSession(user);
             await _unitOfWork.Complete();
+
+            var oldSession = _sessions.Find(s => s.UserId == user.Id);
+            _sessions.Remove(oldSession);
+            //TODO: This removes from DB when it shouldn't
             _sessions.Add(session);
             var groupName = GetGroupName(user.UserName, session);
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);

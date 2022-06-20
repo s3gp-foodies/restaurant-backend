@@ -13,6 +13,6 @@ namespace foodies_app.Interfaces.Repositories
         Task UpdateOrderItemStatus(int id, Status status);
         Task<List<Order>> GetAllOrders();
         Task<List<SubmittedOrderDto>> GetStaffOrders();
-        void ClearAllOrders();
+        Task EndSession(int userId);
     }
 }
